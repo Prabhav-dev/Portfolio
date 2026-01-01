@@ -1,0 +1,116 @@
+/* 1. RESET & LAYOUT */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body {
+    background: var(--bg-color, #0b061f); 
+    color: var(--text-color, #fdfdfd);
+    min-height: 200vh; 
+    overflow-x: hidden;
+    transition: background 0.5s ease;
+}
+
+/* 2. BACKGROUND TREE */
+.tree-background {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+canvas {
+    display: block;
+    max-width: 100%;
+    max-height: 100vh;
+}
+
+
+.about-hero {
+    height: 100vh; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.about-hero h1 {
+    font-size: 8rem;
+    font-family: 'Poppins', sans-serif;
+}
+
+
+.experience {
+    padding: 10rem 7%;
+    position: relative;
+    z-index: 1; 
+}
+
+.timeline {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.timeline-line {
+    position: absolute;
+    left: 20px;
+    top: 0;
+    width: 2px;
+    height: 100%;
+    background: var(--main-color, #754ef9);
+    box-shadow: 0 0 10px var(--main-color);
+}
+
+.exp-item {
+    position: relative;
+    padding-left: 60px;
+    margin-bottom: 5rem;
+}
+
+.exp-dot {
+    position: absolute;
+    left: 11px;
+    top: 20px;
+    width: 20px;
+    height: 20px;
+    background: var(--main-color, #754ef9);
+    border-radius: 50%;
+    box-shadow: 0 0 15px var(--main-color);
+}
+
+.exp-box {
+    background: rgba(11, 6, 31, 0.8); 
+    border: 1px solid var(--main-color, #754ef9);
+    padding: 2.5rem;
+    border-radius: 2rem;
+    backdrop-filter: blur(5px); 
+    transition: 0.4s ease;
+}
+
+.exp-box:hover {
+    transform: translateX(10px);
+    background: var(--main-color, #754ef9);
+}
+
+/* 5. THE GLOW EFFECT */
+.glow-active {
+    animation: pulse 3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { 
+        filter: drop-shadow(0 0 5px var(--main-color)) brightness(100%);
+    }
+    50% { 
+        filter: drop-shadow(0 0 25px var(--main-color)) brightness(120%);
+    }
+}
