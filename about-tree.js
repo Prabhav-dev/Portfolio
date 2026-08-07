@@ -1,302 +1,457 @@
 const canvas = document.getElementById('treeCanvas');
 const ctx = canvas.getContext('2d');
 
-let branches = [];
-let currentFrame = 0;
-let totalFrames = 190;
-let isAnimating = false;
-let treeGenerated = false;
-let treeColor = '#000';
-let glowColor = 'cyan';
+let treeData = null;
+let animProgress = 0;
+let animationFrameId = null;
+let activeInfoCard = null;
+let currentHoveredNode = null;
+let pulseTime = 0;
 
-function syncColorsWithTheme() {
-    const isLightMode = document.body.classList.contains('light-mode');
-    
-    if (isLightMode) {
-        treeColor = '#333'; 
-        glowColor = '#ffaa00'; 
-    } else {
-        treeColor = '#fdfdfd'; 
-        glowColor = '#754ef9'; 
-    }
+const PORTFOLIO_NODES = [
+  {
+    title: "Foundations",
+    detail: "Pursuing a Bachelor's in Computer Engineering with a core focus on Data Structures, Algorithms, and CS fundamentals."
+  },
+  {
+    title: "Backend Systems",
+    detail: "Built foundational skills in Rust and the Java Spring framework for building scalable backend services."
+  },
+  {
+    title: "Low-Level Infra",
+    detail: "Engineered prototypes for a custom B+ Tree storage engine and a manual database ledger architecture."
+  },
+  {
+    title: "Hardware",
+    detail: "Foundational knowledge in Digital Logic, COA, 8086 Microprocessor, Theory of Computation, and Compiler Design."
+  },
+  {
+    title: "Space Tech",
+    detail: "Developed a Python pipeline fetching Google Earth Engine satellite imagery for spatial impact analysis."
+  },
+  {
+    title: "Conversion",
+    detail: "Contributed to open-source by porting java-diff-utils to Rust while maintaining full test suite compliance."
+  },
+  {
+    title: "Systems Prog",
+    detail: "Focused on low-level memory programming, regex engines, and parallel distributed systems."
+  },
+  {
+    title: "Cyber Security",
+    detail: "Honours and Minor in Cyber Security; practical experience deploying ASCON-128 and Argon2 cryptography, alongside blockchain mechanics."
+  },
+  {
+    title: "Artificial Intelligence",
+    detail: "Minor in Artificial Intelligence; hands-on experience implementing custom algorithms like Myers diff and Union-Find."
+  }
+];
 
-    document.documentElement.style.setProperty('--glow-color', glowColor);
-    
-    if (treeGenerated && !isAnimating) {
-        toggleTreeGlow(true);
-    }
+function getThemeColors() {
+    const isLight = document.body.classList.contains('light-mode');
+    return {
+        branchColor: isLight ? '#754ef9' : '#b892ff',
+        purpleGlow: isLight ? '#a78bfa' : '#754ef9',
+        whiteGlow: '#ffffff',
+        nodeBg: isLight ? '#754ef9' : '#9333ea',
+        nodeBorder: '#ffffff',
+        nodeText: '#ffffff'
+    };
 }
 
-// Responsive canvas sizing
 function resizeCanvas() {
-    const maxWidth = 800;
-    const maxHeight = 900;
-    const padding = 20;
-    
-    const availableWidth = window.innerWidth - padding;
-    const availableHeight = window.innerHeight - padding;
-    
-    let width = Math.min(maxWidth, availableWidth);
-    let height = Math.min(maxHeight, availableHeight);
-    
-    // Maintain aspect ratio
-    const aspectRatio = maxWidth / maxHeight;
-    if (width / height > aspectRatio) {
-        width = height * aspectRatio;
-    } else {
-        height = width / aspectRatio;
-    }
-    
-    canvas.width = width;
-    canvas.height = height;
-    
-    if (treeGenerated && !isAnimating) {
-        toggleTreeGlow(true);
-    }
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = window.innerWidth * dpr;
+    canvas.height = window.innerHeight * dpr;
+    canvas.style.width = `${window.innerWidth}px`;
+    canvas.style.height = `${window.innerHeight}px`;
+    ctx.scale(dpr, dpr);
+
+    buildTreeStructure();
 }
 
-// Detect color scheme
-function updateColorScheme() {
-    syncColorsWithTheme();
+/**
+ * Builds tree structure with Boundary Checks & Box Collision Deduplication
+ */
+function buildTreeStructure() {
+    const w = window.innerWidth;
+    const h = window.innerHeight;
 
-    const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
-    if (isDark) {
-        treeColor = '#fff';
-        glowColor = 'cyan';
-    } else {
-        treeColor = '#000';
-        glowColor = '#ffaa00';
-    }
+    const startX = w * 0.5;
+    const startY = h * 0.90;
+    const scale = Math.min(w / 1200, h / 950);
 
-    document.documentElement.style.setProperty('--glow-color', glowColor);
-    
-    if (treeGenerated && !isAnimating) {
-        toggleTreeGlow(true);
-    }
-}
+    const groundLine = {
+        x1: w * 0.15,
+        y1: startY,
+        x2: w * 0.85,
+        y2: startY,
+        width: 3 * scale
+    };
 
-class Branch {
-    constructor(x1, y1, x2, y2, width, generation) {
-        this.x1 = x1;
-        this.y1 = y1;
-        this.x2 = x2;
-        this.y2 = y2;
-        this.width = width;
-        this.generation = generation;
-    }
-    
-    draw(progress) {
-        const currentProgress = Math.min(progress, 1);
-        const currentX = this.x1 + (this.x2 - this.x1) * currentProgress;
-        const currentY = this.y1 + (this.y2 - this.y1) * currentProgress;
-        
-        ctx.beginPath();
-        ctx.moveTo(this.x1, this.y1);
-        ctx.lineTo(currentX, currentY);
-        ctx.strokeStyle = treeColor;
-        ctx.lineWidth = this.width;
-        ctx.lineCap = 'round';
-        ctx.stroke();
-    }
-}
+    function createBranch(x1, y1, angle, length, width, depth, maxDepth, startProg) {
+        const bend = (Math.random() - 0.5) * 0.3;
+        const midAngle = angle + bend;
 
-function generateTree() {
-    branches = [];
-    
-    const startX = canvas.width / 2;
-    const startY = canvas.height - 50;
-    
-    // Ground line
-    const groundBranch = new Branch(0, startY, canvas.width, startY, 2, -1);
-    branches.push(groundBranch);
-    
-    // Scale tree
-    const scale = Math.min(canvas.width / 800, canvas.height / 900);
-    const trunkHeight = 275 * scale;
-    const trunkThickness = 18 * scale;
-    
-    branches.push(new Branch(startX, startY, startX, startY - trunkHeight, trunkThickness, 0));
-    
-    const seed = 67890;
-    let rng = seed;
-    function random() {
-        rng = (rng * 9301 + 49297) % 233280;
-        return rng / 233280;
-    }
-    
-    function createBranches(x, y, angle, length, width, depth, generation, isRandom = false) {
-        if (depth === 0 || length < 12 * scale) return;
-        
-        const endX = x + length * Math.cos(angle);
-        const endY = y - length * Math.sin(angle);
-        
-        branches.push(new Branch(x, y, endX, endY, width, generation));
-        
-        let angleVariation, baseAngleSpread, lengthReduction;
-        
-        if (isRandom) {
-            angleVariation = (random() - 0.5) * 0.5;
-            baseAngleSpread = 0.4 + random() * 0.4;
-            lengthReduction = 0.6 + random() * 0.2;
-        } else {
-            angleVariation = (random() - 0.5) * 0.2;
-            if (generation === 1) {
-                baseAngleSpread = 0.78;
-            } else if (generation === 2) {
-                baseAngleSpread = 0.52;
-            } else if (depth <= 2) {
-                baseAngleSpread = 0.38;
-            } else {
-                baseAngleSpread = 0.48;
+        const cpX = x1 + (length * 0.5) * Math.cos(midAngle);
+        const cpY = y1 - (length * 0.5) * Math.sin(midAngle);
+
+        const endX = x1 + length * Math.cos(angle);
+        const endY = y1 - length * Math.sin(angle);
+
+        const duration = 0.22;
+        const children = [];
+
+        if (depth < maxDepth) {
+            const branchCount = depth === 0 ? 3 : (Math.random() > 0.3 ? 2 : 3);
+            const spread = 0.65 + Math.random() * 0.35;
+
+            for (let i = 0; i < branchCount; i++) {
+                const angleOffset = ((i / (branchCount - 1 || 1)) - 0.5) * spread * 2 + (Math.random() - 0.5) * 0.1;
+                const nextAngle = angle + angleOffset;
+                const nextLength = length * (0.72 + Math.random() * 0.1);
+                const nextWidth = Math.max(width * 0.72, 2 * scale);
+                const nextStartProg = startProg + duration * 0.8;
+
+                children.push(createBranch(endX, endY, nextAngle, nextLength, nextWidth, depth + 1, maxDepth, nextStartProg));
             }
-            lengthReduction = 0.68;
         }
-        
-        const newLength = length * lengthReduction;
-        const newWidth = Math.max(width * 0.72, 1.2 * scale);
-        
-        let numBranches;
-        if (depth <= 1) {
-            numBranches = 1;
-        } else if (depth === 2) {
-            numBranches = random() > 0.5 ? 2 : 1;
-        } else if (isRandom) {
-            const rand = random();
-            numBranches = rand > 0.7 ? 3 : (rand > 0.3 ? 2 : 1);
+
+        return {
+            x1, y1, cpX, cpY, endX, endY,
+            width, depth, maxDepth, children, info: null,
+            startProgress: startProg,
+            duration: duration
+        };
+    }
+
+    const stemHeight = 220 * scale;
+    const stemWidth = 18 * scale; 
+    
+    const rootTrunk = createBranch(startX, startY - (stemWidth / 2), Math.PI / 2, stemHeight, stemWidth, 0, 4, 0);
+
+    // DEDUPLICATION & BOUNDARY PASS
+    const leafNodes = [];
+    function collectLeaves(node) {
+        if (node.children.length === 0) {
+            leafNodes.push(node);
         } else {
-            numBranches = generation === 1 ? 2 : (random() > 0.65 ? 3 : 2);
-        }
-        
-        const nextIsRandom = !isRandom && random() > 0.6;
-        
-        if (numBranches === 1) {
-            const singleAngle = angle + angleVariation * 0.8;
-            createBranches(endX, endY, singleAngle, newLength, newWidth, depth - 1, generation + 1, nextIsRandom);
-        } else if (numBranches === 2) {
-            const leftAngle = angle + baseAngleSpread + angleVariation;
-            const rightAngle = angle - baseAngleSpread - angleVariation;
-            createBranches(endX, endY, leftAngle, newLength, newWidth, depth - 1, generation + 1, nextIsRandom);
-            createBranches(endX, endY, rightAngle, newLength, newWidth, depth - 1, generation + 1, nextIsRandom);
-        } else {
-            const leftAngle = angle + baseAngleSpread * 1.1 + angleVariation;
-            const midAngle = angle + angleVariation * 0.3;
-            const rightAngle = angle - baseAngleSpread * 1.1 - angleVariation;
-            createBranches(endX, endY, leftAngle, newLength * 0.92, newWidth, depth - 1, generation + 1, nextIsRandom);
-            createBranches(endX, endY, midAngle, newLength * 0.88, newWidth * 0.9, depth - 1, generation + 1, nextIsRandom);
-            createBranches(endX, endY, rightAngle, newLength * 0.92, newWidth, depth - 1, generation + 1, nextIsRandom);
+            node.children.forEach(collectLeaves);
         }
     }
-    
-    const branchStartHeight = startY - (trunkHeight * 0.7);
-    const startAngle = Math.PI / 2;
-    
-    const mainBranches = [
-        { angle: startAngle - 0.5, random: false },
-        { angle: startAngle - 0.25, random: true },
-        { angle: startAngle, random: false },
-        { angle: startAngle + 0.25, random: true },
-        { angle: startAngle + 0.5, random: false }
-    ];
-    
-    mainBranches.forEach((branch) => {
-        const branchLength = 175 * scale;
-        createBranches(startX, branchStartHeight, branch.angle, branchLength, 10 * scale, 5, 1, branch.random);
+    collectLeaves(rootTrunk);
+
+    leafNodes.sort(() => Math.random() - 0.5);
+
+    const placedBoxCoords = [];
+    let infoIndex = 0;
+
+    ctx.font = 'bold 9.5px sans-serif'; 
+
+    leafNodes.forEach(leaf => {
+        if (infoIndex >= PORTFOLIO_NODES.length) return; 
+
+        const candidateInfo = PORTFOLIO_NODES[infoIndex];
+        const textMetrics = ctx.measureText(candidateInfo.title);
+        const btnWidth = textMetrics.width + 18; 
+        const btnHeight = 22;
+
+        const btnLeft = leaf.endX - btnWidth / 2;
+        const btnRight = leaf.endX + btnWidth / 2;
+        const btnTop = leaf.endY - btnHeight / 2;
+        const btnBottom = leaf.endY + btnHeight / 2;
+
+        const topMargin = 90;
+        const sideMargin = 40;
+        if (btnTop < topMargin || btnBottom > h - 30 || btnLeft < sideMargin || btnRight > w - sideMargin) {
+            return; 
+        }
+
+        const gap = 12; 
+        const isOverlapping = placedBoxCoords.some(box => {
+            return !(btnRight + gap < box.left || 
+                     btnLeft - gap > box.right || 
+                     btnBottom + gap < box.top || 
+                     btnTop - gap > box.bottom);
+        });
+
+        if (!isOverlapping) {
+            leaf.info = candidateInfo;
+            infoIndex++;
+            placedBoxCoords.push({ left: btnLeft, right: btnRight, top: btnTop, bottom: btnBottom });
+        }
     });
+
+    treeData = { groundLine, rootTrunk, scale };
 }
 
-function clearCanvas() {
+/**
+ * Draws ground line and glowing tree branches
+ */
+function drawTree(progress) {
+    if (!treeData) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-}
 
-function drawCompleteTree() {
-    clearCanvas();
-    branches.forEach(branch => {
-        branch.draw(1);
-    });
-}
+    const colors = getThemeColors();
+    const pulseFactor = (Math.sin(pulseTime) + 1) / 2;
+    const glowRadius = 10 + pulseFactor * 18;
+    const coreBrightness = 0.5 + pulseFactor * 0.5;
 
-function animate() {
-    clearCanvas();
-    currentFrame++;
-    const overallProgress = currentFrame / totalFrames;
-    
-    branches.forEach((branch, index) => {
-        const distanceFromGround = Math.abs(branch.y1 - (canvas.height - 50));
-        const maxDistance = canvas.height;
-        const normalizedDistance = distanceFromGround / maxDistance;
-        
-        const branchStartTime = normalizedDistance * 0.7;
-        const branchProgress = Math.max(0, (overallProgress - branchStartTime) / 0.3);
-        
-        if (branchProgress > 0) {
-            branch.draw(Math.min(branchProgress, 1));
+    // Ground Boundary Line
+    const gl = treeData.groundLine;
+    const currentGroundX2 = gl.x1 + (gl.x2 - gl.x1) * Math.min(1, progress * 2.5);
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(gl.x1, gl.y1);
+    ctx.lineTo(currentGroundX2, gl.y2);
+
+    ctx.shadowColor = pulseFactor > 0.5 ? colors.purpleGlow : colors.whiteGlow;
+    ctx.shadowBlur = glowRadius;
+    ctx.strokeStyle = colors.branchColor;
+    ctx.lineWidth = gl.width;
+    ctx.lineCap = 'round';
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(gl.x1, gl.y1);
+    ctx.lineTo(currentGroundX2, gl.y2);
+    ctx.strokeStyle = `rgba(255, 255, 255, ${coreBrightness * 0.7})`;
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    ctx.restore();
+
+    // Recursive Branch Drawing
+    function drawBranch(node) {
+        const localProgress = Math.max(0, Math.min(1, (progress - node.startProgress) / node.duration));
+        if (localProgress <= 0) return;
+
+        const currentCpX = node.x1 + (node.cpX - node.x1) * localProgress;
+        const currentCpY = node.y1 + (node.cpY - node.y1) * localProgress;
+        const currentEndX = node.x1 + (node.endX - node.x1) * localProgress;
+        const currentEndY = node.y1 + (node.endY - node.y1) * localProgress;
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(node.x1, node.y1);
+        ctx.quadraticCurveTo(currentCpX, currentCpY, currentEndX, currentEndY);
+
+        ctx.shadowColor = pulseFactor > 0.5 ? colors.purpleGlow : colors.whiteGlow;
+        ctx.shadowBlur = glowRadius;
+        ctx.strokeStyle = colors.branchColor;
+        ctx.lineWidth = node.width;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.stroke();
+        ctx.restore();
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(node.x1, node.y1);
+        ctx.quadraticCurveTo(currentCpX, currentCpY, currentEndX, currentEndY);
+        ctx.strokeStyle = `rgba(255, 255, 255, ${coreBrightness * 0.65})`;
+        ctx.lineWidth = Math.max(0.8, node.width * 0.22);
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.stroke();
+        ctx.restore();
+
+        if (localProgress > 0.35) {
+            node.children.forEach(child => drawBranch(child));
         }
-    });
-    
-    if (currentFrame < totalFrames) {
-        requestAnimationFrame(animate);
-    } else {
-        isAnimating = false;
-        toggleTreeGlow(true);
+
+        if (localProgress >= 1 && node.info) {
+            drawInteractiveTip(node.endX, node.endY, node.info, colors, pulseFactor);
+        }
     }
+
+    drawBranch(treeData.rootTrunk);
 }
 
-function startAnimation() {
-    if (isAnimating) return;
-    toggleTreeGlow(false);
+/**
+ * Interactive Pill Buttons
+ */
+function drawInteractiveTip(x, y, info, colors, pulseFactor) {
+    ctx.save();
+
+    ctx.font = 'bold 9.5px sans-serif';
+    const textMetrics = ctx.measureText(info.title);
+    const btnWidth = textMetrics.width + 18; 
+    const btnHeight = 22;
     
-    if (!treeGenerated) {
-        generateTree();
-        treeGenerated = true;
+    const btnX = x - btnWidth / 2;
+    const btnY = y - btnHeight / 2;
+    const radius = 11;
+
+    ctx.shadowColor = colors.whiteGlow;
+    ctx.shadowBlur = 12 + pulseFactor * 10;
+
+    ctx.beginPath();
+    if (ctx.roundRect) {
+        ctx.roundRect(btnX, btnY, btnWidth, btnHeight, radius);
+    } else {
+        ctx.rect(btnX, btnY, btnWidth, btnHeight);
     }
-    
-    currentFrame = 0;
-    isAnimating = true;
+    ctx.fillStyle = colors.nodeBg;
+    ctx.fill();
+
+    ctx.strokeStyle = colors.nodeBorder;
+    ctx.lineWidth = 1.3;
+    ctx.stroke();
+
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = colors.nodeText;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(info.title, x, y + 0.5);
+
+    ctx.restore();
+
+    info.x = x;
+    info.y = y;
+    info.w = btnWidth;
+    info.h = btnHeight;
+}
+
+/**
+ * Animation Loop
+ */
+function animate() {
+    pulseTime += 0.035;
+
+    if (animProgress < 1) {
+        animProgress += 0.005;
+    }
+
+    drawTree(animProgress);
+    animationFrameId = requestAnimationFrame(animate);
+}
+
+function startTreeAnimation() {
+    if (animationFrameId) cancelAnimationFrame(animationFrameId);
+    hideInfoCard();
+    animProgress = 0;
+    pulseTime = 0;
+    buildTreeStructure();
     animate();
 }
 
-function toggleTreeGlow(isGlowing) {
-    if (isGlowing) {
-        ctx.shadowBlur = 10;
-        ctx.shadowColor = glowColor;
-        canvas.classList.add('glow-active');
+// Mouse Hover Listener for Nodes
+window.addEventListener('mousemove', (e) => {
+    if (!treeData || animProgress < 1) return;
+
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+
+    let hoveredNode = null;
+
+    function checkHover(node) {
+        if (node.info && node.info.x) {
+            const dx = Math.abs(mouseX - node.info.x);
+            const dy = Math.abs(mouseY - node.info.y);
+            if (dx < (node.info.w / 2 + 4) && dy < (node.info.h / 2 + 4)) {
+                hoveredNode = node.info;
+            }
+        }
+        node.children.forEach(checkHover);
+    }
+
+    checkHover(treeData.rootTrunk);
+
+    if (hoveredNode) {
+        canvas.style.cursor = 'pointer';
+        if (currentHoveredNode !== hoveredNode) {
+            currentHoveredNode = hoveredNode;
+            showInfoCard(hoveredNode, e.clientX, e.clientY);
+        } else if (activeInfoCard) {
+            positionInfoCard(e.clientX, e.clientY);
+        }
     } else {
-        ctx.shadowBlur = 0;
-        ctx.shadowColor = 'transparent';
-        canvas.classList.remove('glow-active');
-    }
-
-    if (treeGenerated && !isAnimating) {
-        drawCompleteTree(); 
-    }
-}
-
-updateColorScheme();
-resizeCanvas();
-
-window.addEventListener('resize', resizeCanvas);
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateColorScheme);
-
-canvas.addEventListener('click', () => {
-    if (!isAnimating) {
-        treeGenerated = false; 
-        startAnimation();
+        canvas.style.cursor = 'default';
+        if (currentHoveredNode !== null) {
+            currentHoveredNode = null;
+            hideInfoCard();
+        }
     }
 });
 
+canvas.addEventListener('click', () => {
+    if (animProgress >= 1) {
+        startTreeAnimation();
+    }
+});
+
+function positionInfoCard(clientX, clientY) {
+    if (!activeInfoCard) return;
+    
+    let left = clientX + 15;
+    let top = clientY + 15;
+    
+    const cardWidth = 280; 
+    const cardHeight = 100;
+    
+    if (left + cardWidth > window.innerWidth) {
+        left = clientX - cardWidth - 10;
+    }
+    if (top + cardHeight > window.innerHeight) {
+        top = clientY - cardHeight - 10;
+    }
+
+    activeInfoCard.style.left = `${left}px`;
+    activeInfoCard.style.top = `${top}px`;
+}
+
+function showInfoCard(info, clientX, clientY) {
+    hideInfoCard();
+
+    const card = document.createElement('div');
+    card.className = 'tree-info-card';
+    card.style.pointerEvents = 'none';
+    card.innerHTML = `
+        <h4>${info.title}</h4>
+        <p>${info.detail}</p>
+    `;
+
+    document.body.appendChild(card);
+    activeInfoCard = card;
+    
+    positionInfoCard(clientX, clientY);
+}
+
+function hideInfoCard() {
+    if (activeInfoCard) {
+        activeInfoCard.remove();
+        activeInfoCard = null;
+    }
+}
+
+window.addEventListener('resize', () => {
+    resizeCanvas();
+    if (animProgress >= 1) drawTree(1);
+});
+
+// Dark mode icon handler sync
+const darkModeIcon = document.querySelector('#darkMode-icon');
+if (darkModeIcon) {
+    darkModeIcon.onclick = () => {
+        darkModeIcon.classList.toggle('bx-sun');
+        document.body.classList.toggle('light-mode');
+        const isLight = document.body.classList.contains('light-mode');
+        localStorage.setItem('theme', isLight ? 'light' : 'dark');
+        if (animProgress >= 1) drawTree(1);
+    };
+}
+
 window.addEventListener('load', () => {
-    // Check for saved theme preference
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'light') {
         document.body.classList.add('light-mode');
-        if(darkModeIcon) darkModeIcon.classList.add('bx-sun');
+        if (darkModeIcon) darkModeIcon.classList.add('bx-sun');
     }
 
-
-    syncColorsWithTheme();
-    
-    startAnimation(); 
+    resizeCanvas();
+    startTreeAnimation();
 
     if (typeof ScrollReveal !== 'undefined') {
         const sr = ScrollReveal({
@@ -310,20 +465,3 @@ window.addEventListener('load', () => {
         sr.reveal('.exp-box', { interval: 200, origin: 'right' });
     }
 });
-
-// DARK MODE TOGGLE LOGIC
-const darkModeIcon = document.querySelector('#darkMode-icon');
-
-if (darkModeIcon) {
-    darkModeIcon.onclick = () => {
-        darkModeIcon.classList.toggle('bx-sun');
-        document.body.classList.toggle('light-mode');
-        
-    y
-        syncColorsWithTheme();
-        
-     
-        const isLight = document.body.classList.contains('light-mode');
-        localStorage.setItem('theme', isLight ? 'light' : 'dark');
-    };
-}

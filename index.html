@@ -3,11 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cold Lich | Personal Portfolio</title>
+    <title>Prabhav Dwiwedi | Personal Portfolio</title>
+    
+    <!-- External CSS & Icons -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="style.css">
+
+    <!-- Cloudflare Web Analytics -->
+    <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "YOUR_CLOUDFLARE_TOKEN_HERE"}'></script>
 </head>
 <body class="dark-mode">
+
+    <!--HEADER / NAVBAR-->
     <header class="header">
         <a href="#home" class="logo">Portfolio.</a>
         <nav class="navbar">
@@ -19,10 +26,11 @@
         <div class="bx bx-moon" id="darkMode-icon"></div>
     </header>
 
+    <!--HOME SECTION-->
     <section class="home" id="home">
         <div class="home-content">
             <h3>Hello, It's</h3>
-            <h1>Cold Lich</h1>
+            <h1>Prabhav Dwiwedi</h1>
             <h3>And I'm a <span class="multiple-text"></span></h3>
             <p>My goal is to specialise in <b>Software Architecture and Distributed Systems.</b></p>
             <p>Surviving the heat waves of the world to now thrive in the market of CS as a Computer Science Engineer.</p>
@@ -38,6 +46,7 @@
         </div>
     </section>
 
+    <!--ABOUT SECTION-->
     <section class="about" id="about">
         <div class="about-content intro-text">
             <h2 class="heading">Technical <span>Introduction</span></h2>
@@ -47,6 +56,7 @@
         </div>
     </section>
 
+    <!--SPECIALIZATION SECTION-->
     <section class="specialization" id="specialization">
         <h2 class="heading">Core <span>Focus</span></h2>
         <div class="spec-container">
@@ -57,22 +67,31 @@
         </div>
     </section>
 
+    <!--CONTACT SECTION-->
     <section class="contact-globe" id="contact">
         <div class="contact-container">
             <div class="contact-box">
                 <h2>Get In <span>Touch</span></h2>
-                <form action="#">
-                    <input type="text" placeholder="Full Name">
-                    <input type="email" placeholder="Email Address">
-                    <textarea cols="30" rows="10" placeholder="Your Message"></textarea>
+                
+                <!-- Serverless Contact Form -->
+                <form id="contact-form">
+                    <input type="text" id="contact-name" name="name" placeholder="Full Name" required>
+                    <input type="email" id="contact-email" name="email" placeholder="Email Address" required>
+                    <textarea id="contact-message" name="message" cols="30" rows="10" placeholder="Your Message" required></textarea>
+                    
+                    <!-- Web3Forms Free Honeypot Bot Prevention -->
+                    <input type="checkbox" name="botcheck" style="display: none;">
+
                     <button type="submit" class="btn">Send Message</button>
                 </form>
+
                 <a href="#home" class="know-more">Back to the start? ↑</a>
             </div>
             <div class="globe-area" id="earth-container"></div>
         </div>
     </section>
 
+    <!--SCRIPTS / LIBRARIES -->    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
     <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
     <script src="https://unpkg.com/scrollreveal"></script>
