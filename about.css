@@ -31,8 +31,19 @@ canvas#treeCanvas {
 }
 
 .about-hero h1 {
-    font-size: 8rem;
+    font-size: clamp(3.2rem, 9vw, 8rem);
     font-family: 'Poppins', sans-serif;
+    line-height: 1.1;
+    padding: 0 2rem;
+}
+
+.about-hero .hero-subtitle {
+    margin-top: 1.5rem;
+    font-size: clamp(1.3rem, 2.2vw, 1.6rem);
+    color: var(--text-color, #fdfdfd);
+    opacity: 0.75;
+    padding: 0 2rem;
+    text-align: center;
 }
 
 /* 3. TIMELINE & EXPERIENCE SECTION */
@@ -127,4 +138,58 @@ body.light-mode .tree-info-card {
 .tree-info-card p {
     font-size: 0.9rem;
     line-height: 1.4;
+}
+
+/* 5. RESPONSIVE ADJUSTMENTS */
+@media (max-width: 991px) {
+    .experience {
+        padding: 6rem 5%;
+    }
+}
+
+@media (max-width: 768px) {
+    .exp-item {
+        padding-left: 48px;
+        margin-bottom: 3.5rem;
+    }
+
+    .exp-box {
+        padding: 1.8rem;
+    }
+
+    .exp-box h3 {
+        font-size: 1.9rem;
+    }
+
+    .exp-box p {
+        font-size: 1.4rem;
+    }
+
+    .timeline-line {
+        left: 16px;
+    }
+
+    .exp-dot {
+        left: 7px;
+        width: 16px;
+        height: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .tree-info-card {
+        width: min(260px, 78vw);
+        padding: 1rem;
+    }
+
+    .about-hero h1 {
+        font-size: clamp(2.6rem, 11vw, 4.5rem);
+    }
+}
+
+/* Respect users who've asked their OS/browser to reduce motion */
+@media (prefers-reduced-motion: reduce) {
+    .exp-box {
+        transition: none;
+    }
 }

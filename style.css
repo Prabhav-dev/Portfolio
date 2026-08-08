@@ -47,7 +47,7 @@ section {
 }
 
 .heading {
-    font-size: 4.5rem;
+    font-size: clamp(2.8rem, 6vw, 4.5rem);
     text-align: center;
     margin-bottom: 3rem;
 }
@@ -126,17 +126,19 @@ span {
     justify-content: center;
     align-items: center;
     gap: 4.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .home-content h1 {
-    font-size: 5.6rem;
+    font-size: clamp(3.2rem, 8vw, 5.6rem);
     font-weight: 700;
     line-height: 1.2;
     margin-bottom: 0.5rem;
 }
 
 .home-content h3 {
-    font-size: 2.8rem;
+    font-size: clamp(1.9rem, 4vw, 2.8rem);
     font-weight: 700;
     margin-bottom: 0.5rem;
 }
@@ -322,6 +324,17 @@ span {
     background: transparent;
 }
 
+.tree-container {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+canvas, svg {
+  max-width: 100%;
+  height: auto; 
+}
+
 /* ========== TIMELINE BOXES ========== */
 .timeline {
     position: relative;
@@ -386,9 +399,21 @@ span {
 }
 
 /* ========== CLEAN RESPONSIVE LOGIC ========== */
+
+/* Tablet & Smaller Laptops */
 @media (max-width: 991px) {
-    .header { padding: 2rem 3%; }
-    section { padding: 10rem 3% 2rem; }
+    .header { 
+        padding: 2rem 4%; 
+    }
+
+    section { 
+        padding: 10rem 4% 2rem; 
+    }
+
+    .navbar a {
+        font-size: 1.5rem;
+        margin-left: 2rem;
+    }
 
     .contact-container {
         grid-template-columns: 1fr; 
@@ -406,8 +431,83 @@ span {
     }
 }
 
+/* Mobile Devices & Small Tablets */
 @media (max-width: 768px) {
-    .home { flex-direction: column-reverse; text-align: center; }
-    .home-content h1 { font-size: 4rem; }
-    .about { flex-direction: column; text-align: center; }
+    .header {
+        padding: 1.5rem 4%;
+    }
+
+    .logo {
+        font-size: 2rem;
+    }
+
+    .navbar a {
+        font-size: 1.3rem;
+        margin-left: 1.2rem;
+    }
+
+    #darkMode-icon {
+        font-size: 2rem;
+        margin-left: 1.2rem;
+    }
+
+    .home { 
+        flex-direction: column-reverse; 
+        text-align: center; 
+        gap: 3rem;
+    }
+
+    .home-img img {
+        width: 220px;
+        height: 220px;
+        min-width: unset;
+        min-height: unset;
+    }
+
+    .about { 
+        flex-direction: column; 
+        text-align: center; 
+    }
+
+    .about-content h2 {
+        text-align: center; /* Fixes left-align conflict */
+    }
+
+    .social-media { 
+        justify-content: center; 
+        display: flex; 
+    }
+}
+
+/* Small Smart Phones */
+@media (max-width: 480px) {
+    section { 
+        padding: 8rem 5% 2rem; 
+    }
+
+    .logo {
+        font-size: 1.8rem;
+    }
+
+    .navbar a {
+        font-size: 1.1rem;
+        margin-left: 0.8rem;
+    }
+
+    #darkMode-icon {
+        font-size: 1.8rem;
+        margin-left: 0.8rem;
+    }
+
+    .contact-box { 
+        padding: 2.5rem 2rem; 
+    }
+
+    .spec-box { 
+        padding: 2.5rem 1.5rem; 
+    }
+
+    .spec-box i { 
+        font-size: 5.5rem; 
+    }
 }
