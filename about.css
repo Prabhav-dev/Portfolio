@@ -1,8 +1,8 @@
 /* ==========================================================================
-   ABOUT PAGE SPECIFIC STYLES & INTERACTIVE TREE OVERLAY
+   ABOUT PAGE SPECIFIC STYLES & PARALLAX TREE OVERLAY
    ========================================================================== */
 
-/* 1. BACKGROUND CANVAS & TREE OVERLAY */
+/* 1. BACKGROUND CANVAS & PARALLAX OVERLAY */
 .tree-background {
     position: fixed; 
     top: 0;
@@ -13,49 +13,224 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    pointer-events: auto;
+    transition: opacity 0.3s ease;
 }
 
 canvas#treeCanvas {
     display: block;
     width: 100vw;
     height: 100vh;
+    transition: opacity 0.2s ease-out;
 }
 
-/* 2. HERO & LAYOUT OVERRIDES */
+/* Shade overlay that darkens the background as user scrolls down */
+.tree-overlay-shade {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-color);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease-out;
+}
+
+/* 2. BLANK HERO AREA (UNOBSTRUCTED FOR INTERACTIVE TREE) */
 .about-hero {
     height: 100vh; 
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
+    background: transparent;
+    pointer-events: none;
 }
 
 .about-hero h1 {
-    font-size: clamp(3.2rem, 9vw, 8rem);
-    font-family: 'Poppins', sans-serif;
-    line-height: 1.1;
-    padding: 0 2rem;
+    display: none;
 }
 
-.about-hero .hero-subtitle {
-    margin-top: 1.5rem;
-    font-size: clamp(1.3rem, 2.2vw, 1.6rem);
-    color: var(--text-color, #fdfdfd);
-    opacity: 0.75;
-    padding: 0 2rem;
-    text-align: center;
-}
-
-/* 3. TIMELINE & EXPERIENCE SECTION */
+/* 3. CORE ENGINEERING PILLARS (4 EXPANDED CARDS WITH GRADIENTS) */
 .experience {
-    padding: 10rem 7%;
+    padding: 6rem 7% 8rem;
     position: relative;
-    z-index: 1; 
+    z-index: 2; 
+    max-width: 1250px;
+    margin: 0 auto;
+}
+
+.about-section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3.5rem;
+    margin-bottom: 7rem;
+}
+
+.pillar-card {
+    background: linear-gradient(145deg, rgba(24, 17, 59, 0.75) 0%, rgba(16, 10, 42, 0.9) 100%);
+    border: 1px solid var(--border-color);
+    border-radius: 2.2rem;
+    padding: 4rem 3.5rem;
+    backdrop-filter: blur(16px);
+    box-shadow: 0 1rem 3.5rem var(--shadow-color);
+    display: flex;
+    flex-direction: column;
+    transition: all 0.35s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+body.light-mode .pillar-card {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(243, 240, 255, 0.9) 100%);
+}
+
+.pillar-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #754ef9, #00f0ff, #ec4899);
+    opacity: 0.8;
+    transition: opacity 0.3s;
+}
+
+.pillar-card:hover {
+    border-color: var(--main-color);
+    transform: translateY(-8px);
+    box-shadow: 0 1.5rem 4rem var(--shadow-color), 0 0 20px rgba(117, 78, 249, 0.25);
+}
+
+.pillar-card:hover::before {
+    opacity: 1;
+}
+
+.pillar-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.pillar-num {
+    font-family: var(--mono-font);
+    font-size: 3rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    opacity: 0.85;
+}
+
+.pillar-icon-box {
+    width: 5.4rem;
+    height: 5.4rem;
+    background: linear-gradient(135deg, rgba(117, 78, 249, 0.2), rgba(0, 240, 255, 0.15));
+    border: 1px solid var(--border-color);
+    border-radius: 1.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pillar-icon-box i {
+    font-size: 2.8rem;
+    color: var(--accent-cyan);
+}
+
+.pillar-card h3 {
+    font-size: clamp(2rem, 2.4vw, 2.4rem);
+    font-weight: 800;
+    color: var(--text-color);
+    margin-bottom: 1.2rem;
+    line-height: 1.3;
+}
+
+.pillar-lead {
+    font-size: 1.5rem;
+    color: var(--text-color);
+    font-weight: 500;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    padding-bottom: 1.8rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.pillar-discussion {
+    background: rgba(9, 5, 24, 0.6);
+    border: 1px solid var(--border-color);
+    padding: 2.2rem;
+    border-radius: 1.4rem;
+    margin-bottom: 2.2rem;
+    flex-grow: 1;
+}
+
+body.light-mode .pillar-discussion {
+    background: rgba(247, 246, 252, 0.8);
+}
+
+.pillar-discussion h4 {
+    font-family: var(--mono-font);
+    font-size: 1.3rem;
+    color: var(--accent-cyan);
+    margin-bottom: 1rem;
+}
+
+.pillar-discussion p {
+    font-size: 1.4rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+}
+
+.pillar-discussion p:last-child {
+    margin-bottom: 0;
+}
+
+.pillar-specs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+}
+
+.pill-chip {
+    font-family: var(--mono-font);
+    font-size: 1.15rem;
+    background: linear-gradient(135deg, rgba(117, 78, 249, 0.12), rgba(0, 240, 255, 0.08));
+    color: var(--accent-purple);
+    border: 1px solid var(--border-color);
+    padding: 0.4rem 1.1rem;
+    border-radius: 2rem;
+}
+
+/* 4. TIMELINE & MILESTONES */
+.academic-timeline-wrap {
+    margin-top: 5rem;
+}
+
+.timeline-title {
+    font-size: 2.4rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 4rem;
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
 }
 
 .timeline {
     position: relative;
-    max-width: 800px;
+    max-width: 850px;
     margin: 0 auto;
 }
 
@@ -65,58 +240,84 @@ canvas#treeCanvas {
     top: 0;
     width: 2px;
     height: 100%;
-    background: var(--main-color, #754ef9);
-    box-shadow: 0 0 10px var(--main-color, #754ef9);
+    background: linear-gradient(180deg, var(--main-color), var(--accent-cyan));
+    box-shadow: 0 0 12px var(--main-glow);
 }
 
 .exp-item {
     position: relative;
     padding-left: 60px;
-    margin-bottom: 5rem;
+    margin-bottom: 4rem;
 }
 
 .exp-dot {
     position: absolute;
     left: 11px;
-    top: 20px;
+    top: 24px;
     width: 20px;
     height: 20px;
-    background: var(--main-color, #754ef9);
+    background: linear-gradient(135deg, var(--main-color), var(--accent-cyan));
     border-radius: 50%;
-    box-shadow: 0 0 15px var(--main-color, #754ef9);
+    box-shadow: 0 0 16px var(--main-color);
 }
 
 .exp-box {
-    background: rgba(11, 6, 31, 0.8); 
-    border: 1px solid var(--main-color, #754ef9);
-    padding: 2.5rem;
-    border-radius: 2rem;
-    backdrop-filter: blur(5px); 
-    transition: transform 0.4s ease, background 0.4s ease;
+    background: var(--card-bg); 
+    border: 1px solid var(--border-color);
+    padding: 2.8rem;
+    border-radius: 1.8rem;
+    backdrop-filter: blur(12px); 
+    transition: all 0.35s ease;
+    box-shadow: 0 0.8rem 2.5rem var(--shadow-color);
 }
 
-body.light-mode .exp-box {
-    background: rgba(255, 255, 255, 0.85);
-    color: var(--text-color, #111);
+.exp-date {
+    display: inline-block;
+    font-family: var(--mono-font);
+    font-size: 1.2rem;
+    color: var(--accent-cyan);
+    margin-bottom: 0.6rem;
+    text-transform: uppercase;
+}
+
+.exp-box h3 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+}
+
+.exp-box p {
+    font-size: 1.45rem;
+    color: var(--text-muted);
+    line-height: 1.7;
 }
 
 .exp-box:hover {
-    transform: translateX(10px);
-    background: var(--main-color, #754ef9);
-    color: #fdfdfd;
+    transform: translateX(8px);
+    border-color: var(--main-color);
+    box-shadow: 0 1rem 3rem var(--shadow-color);
 }
 
-/* 4. TREE NODE POPOVER CARD */
+.about-bottom-cta {
+    display: flex;
+    justify-content: center;
+    gap: 1.8rem;
+    margin-top: 5rem;
+    flex-wrap: wrap;
+}
+
+/* 5. TREE NODE POPOVER CARD */
 .tree-info-card {
     position: fixed;
     z-index: 1000;
-    width: 260px;
-    padding: 1.2rem;
-    background: rgba(11, 6, 31, 0.92);
-    border: 1px solid var(--main-color, #754ef9);
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(117, 78, 249, 0.4);
-    backdrop-filter: blur(8px);
+    width: 280px;
+    padding: 1.4rem;
+    background: rgba(9, 5, 24, 0.94);
+    border: 1px solid var(--main-color);
+    border-radius: 1.4rem;
+    box-shadow: 0 0 25px rgba(117, 78, 249, 0.5);
+    backdrop-filter: blur(12px);
     color: #fdfdfd;
     pointer-events: none;
     font-family: 'Poppins', sans-serif;
@@ -124,45 +325,43 @@ body.light-mode .exp-box {
 }
 
 body.light-mode .tree-info-card {
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0.96);
     color: #111;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.18);
 }
 
 .tree-info-card h4 {
-    font-size: 1.2rem;
-    color: var(--main-color, #754ef9);
-    margin-bottom: 0.4rem;
+    font-size: 1.35rem;
+    color: var(--accent-cyan);
+    margin-bottom: 0.6rem;
+    font-weight: 700;
 }
 
 .tree-info-card p {
-    font-size: 0.9rem;
-    line-height: 1.4;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    color: var(--text-muted);
 }
 
-/* 5. RESPONSIVE ADJUSTMENTS */
+/* 6. RESPONSIVE BREAKPOINTS */
 @media (max-width: 991px) {
+    .cards-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+    }
+
     .experience {
-        padding: 6rem 5%;
+        padding: 5rem 4% 6rem;
     }
 }
 
 @media (max-width: 768px) {
+    .pillar-card {
+        padding: 3rem 2.2rem;
+    }
+
     .exp-item {
         padding-left: 48px;
-        margin-bottom: 3.5rem;
-    }
-
-    .exp-box {
-        padding: 1.8rem;
-    }
-
-    .exp-box h3 {
-        font-size: 1.9rem;
-    }
-
-    .exp-box p {
-        font-size: 1.4rem;
     }
 
     .timeline-line {
@@ -171,25 +370,5 @@ body.light-mode .tree-info-card {
 
     .exp-dot {
         left: 7px;
-        width: 16px;
-        height: 16px;
-    }
-}
-
-@media (max-width: 480px) {
-    .tree-info-card {
-        width: min(260px, 78vw);
-        padding: 1rem;
-    }
-
-    .about-hero h1 {
-        font-size: clamp(2.6rem, 11vw, 4.5rem);
-    }
-}
-
-/* Respect users who've asked their OS/browser to reduce motion */
-@media (prefers-reduced-motion: reduce) {
-    .exp-box {
-        transition: none;
     }
 }

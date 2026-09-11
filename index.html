@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prabhav Dwiwedi | Personal Portfolio</title>
+    <title>Prabhav Dwiwedi | Systems & Storage Engineer</title>
     
     <!-- External CSS & Icons -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -16,80 +16,534 @@
 
     <!--HEADER / NAVBAR-->
     <header class="header">
-        <a href="#home" class="logo">Portfolio.</a>
+        <a href="#home" class="logo">Portfolio<span>.</span></a>
         <nav class="navbar">
-            <a href="#home" class="active">Home</a>
-            <a href="about.html">About me</a>
-            <a href="#specialization">Focus</a>
+            <a href="#about">Focus</a>
+            <a href="#projects">Projects</a>
+            <a href="about.html">Tree Graph</a>
             <a href="#contact">Contact</a>
         </nav>
         <div class="bx bx-moon" id="darkMode-icon"></div>
     </header>
 
-    <!--HOME SECTION-->
+    <!--HOME / HERO SECTION-->
     <section class="home" id="home">
         <div class="home-content">
-            <h3>Hello, It's</h3>
-            <h1>Prabhav Dwiwedi</h1>
-            <h3>And I'm a <span class="multiple-text"></span></h3>
-            <p>My goal is to specialise in <b>Software Architecture and Distributed Systems.</b></p>
-            <p>Surviving the heat waves of the world to now thrive in the market of CS as a Computer Science Engineer.</p>
+            <div class="hero-tag"><span>$</span> systems_engineer --profile</div>
+            <h3 class="hero-greeting">Hello, It's</h3>
+            <h1 class="hero-name">Prabhav Dwiwedi</h1>
+            <h3 class="hero-role">And I build <span class="multiple-text"></span></h3>
+            
+            <p class="hero-impact-text">
+                A computer science undergraduate focused on <strong>low-level backend systems</strong>, <strong>custom storage engines</strong>, and <strong>high-performance backend infrastructure</strong>.
+            </p>
+            
+            <p class="hero-subtext">
+                Specializing in zero-dependency database internals, disk-resident indexing, authenticated page encryption, and high-throughput Rust & Java architectures.
+            </p>
+
             <div class="social-media">
-                <a href="#"><i class='bx bxl-linkedin'></i></a>
-                <a href="#"><i class='bx bxl-github'></i></a>
-                <a href="#"><i class='bx bxl-twitter'></i></a>
+                <a href="https://www.linkedin.com/in/prabhav-dwiwedi-283839348/" target="_blank" rel="noopener noreferrer" title="LinkedIn Profile"><i class='bx bxl-linkedin'></i></a>
+                <a href="https://github.com/Prabhav-dev" target="_blank" rel="noopener noreferrer" title="GitHub Profile"><i class='bx bxl-github'></i></a>
             </div>
-            <a href="#" class="btn">Download CV</a>
+
+            <div class="hero-buttons">
+                <a href="#projects" class="btn">Explore Projects</a>
+                <a href="https://github.com/Prabhav-dev" target="_blank" rel="noopener noreferrer" class="btn btn-outline">GitHub Repos <i class='bx bx-link-external'></i></a>
+            </div>
         </div>
-        <div class="home-img">
-            <img src="https://wallpapers.com/images/hd/cool-profile-picture-lyk4mvqrjewpoi92.jpg" alt="Profile">
+
+        <div class="home-canvas-wrap">
+            <div class="hero-canvas-container" id="hero-3d-node">
+                <!-- Three.js Interactive 3D Canvas will be injected here -->
+            </div>
+            <div class="canvas-hint">Interactive 3D Engine Core &bull; Drag to rotate</div>
         </div>
     </section>
 
-    <!--ABOUT SECTION-->
+    <!--TECHNICAL INTRODUCTION SECTION-->
     <section class="about" id="about">
-        <div class="about-content intro-text">
-            <h2 class="heading">Technical <span>Introduction</span></h2>
-            <h3>Bridging Data & Design</h3>
-            <p>I am a Computer Science Engineer with a specialized interest in high-performance backend systems.</p>
-            <a href="#contact" class="btn">Collaborate</a>
+        <div class="about-container">
+            <div class="about-content intro-text">
+                <h2 class="heading">Systems & <span>Infrastructure</span></h2>
+                <h3 class="about-lead">Low-Level Storage Internals & Performance Infrastructure</h3>
+                <p class="about-description">
+                    I build custom storage engines, write-ahead logging subsystems, and memory layers from first principles in Java and Rust. Rather than relying on heavy third-party abstractions, I focus on page layout efficiency, buffer pooling, and cache-conscious data structures directly on top of standard language runtimes.
+                </p>
+                <p class="about-description">
+                    From implementing <strong>NIST-standardized Ascon-128 AEAD authenticated encryption</strong> over 4 KiB slotted pages to porting the Myers diff algorithm into high-performance <strong>Rust with 100% test suite compliance</strong>, I build systems designed for deterministic correctness and low latency.
+                </p>
+
+                <!-- Technical Metric Highlights -->
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <span class="metric-num">0</span>
+                        <span class="metric-label">External Dependencies in Core Storage Engine</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-num">169/169</span>
+                        <span class="metric-label">Passing Rust Port Tests (100% Upstream Fidelity)</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-num">4.05x</span>
+                        <span class="metric-label">Myers Diff Speedup vs Java Reference (11.6s vs 47.0s)</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-num">8 TiB</span>
+                        <span class="metric-label">Logical Page Address Space Ceiling Architecture</span>
+                    </div>
+                </div>
+
+                <div class="about-actions">
+                    <a href="#projects" class="btn">View Technical Architecture</a>
+                    <a href="about.html" class="btn btn-outline">Interactive Skill Graph & Timeline</a>
+                </div>
+            </div>
         </div>
     </section>
 
-    <!--SPECIALIZATION SECTION-->
+    <!--CORE FOCUS & SPECIALIZATION SECTION-->
     <section class="specialization" id="specialization">
         <h2 class="heading">Core <span>Focus</span></h2>
+        <p class="section-subtitle">Core technical areas I build with and study</p>
+        
         <div class="spec-container">
-            <div class="spec-box"><i class='bx bx-code-alt'></i><h3>Full Stack</h3><p>Connecting Thymeleaf to backends.</p></div>
-            <div class="spec-box"><i class='bx bxl-spring-boot'></i><h3>Spring Boot</h3><p>Enterprise architecture.</p></div>
-            <div class="spec-box"><i class='bx bx-data'></i><h3>System Design</h3><p>Scalable distribution.</p></div>
-            <div class="spec-box"><i class='bx bx-server'></i><h3>Database</h3><p>Hibernate & JPA layers.</p></div>
+            <div class="spec-box">
+                <div class="spec-icon-wrap"><i class='bx bx-data'></i></div>
+                <h3>Storage Engines & B+Trees</h3>
+                <p>Slotted page heaps, manual page pinning, write-ahead logging (WAL) crash recovery, and disk-resident B+Tree indexing.</p>
+                <div class="spec-tags">
+                    <span>B+Tree</span>
+                    <span>WAL</span>
+                    <span>4KB Slotted Pages</span>
+                </div>
+            </div>
+
+            <div class="spec-box">
+                <div class="spec-icon-wrap"><i class='bx bx-code-block'></i></div>
+                <h3>Systems Programming & Rust</h3>
+                <p>High-efficiency memory management, Myers diff algorithms, delta compression, and native non-blocking Java NIO concurrency.</p>
+                <div class="spec-tags">
+                    <span>Rust</span>
+                    <span>Java NIO</span>
+                    <span>Myers Diff</span>
+                </div>
+            </div>
+
+            <div class="spec-box">
+                <div class="spec-icon-wrap"><i class='bx bx-shield-quarter'></i></div>
+                <h3>Applied Cryptography & Security</h3>
+                <p>Ascon-128 AEAD authenticated page framing, deterministic blind indexing, Argon2 memory-hard hashing, and zero-trust data stores.</p>
+                <div class="spec-tags">
+                    <span>Ascon-128</span>
+                    <span>Argon2</span>
+                    <span>Blind Indexing</span>
+                </div>
+            </div>
+
+            <div class="spec-box">
+                <div class="spec-icon-wrap"><i class='bx bx-chip'></i></div>
+                <h3>Edge AI & Telemetry Systems</h3>
+                <p>Fidelity-tiered agent memory layers, spatial satellite imagery pipelines (Google Earth Engine), and low-latency API wrappers.</p>
+                <div class="spec-tags">
+                    <span>LLM Memory</span>
+                    <span>Spatial GEE</span>
+                    <span>Telemetry</span>
+                </div>
+            </div>
         </div>
     </section>
 
-    <!--CONTACT SECTION-->
+    <!--PROJECTS SECTION (EXPANDABLE BOX ACCORDIONS)-->
+    <section class="projects-section" id="projects">
+        <h2 class="heading">Featured <span>Projects</span></h2>
+        <p class="section-subtitle">Click on any project to see architecture details, benchmarks, and source code</p>
+
+        <!-- 1. MAJOR PROJECTS -->
+        <div class="project-tier-header">
+            <span class="tier-badge"><i class='bx bx-layer'></i> Major Architectural Systems</span>
+            <h3>Storage Engines & Core Algorithms</h3>
+        </div>
+
+        <div class="projects-accordion-list">
+            
+            <!-- PROJECT 1: YGGDRASIL BLIND STORAGE -->
+            <div class="project-card active" data-accordion>
+                <div class="project-header" onclick="toggleAccordion(this)">
+                    <div class="project-title-meta">
+                        <div class="project-badge major">Major Project &bull; Zero Dependency Engine</div>
+                        <h3>Yggdrasil &mdash; Blind Storage System</h3>
+                        <p class="project-summary-preview">Java-based embedded storage engine and networking middleware featuring Ascon-128 AEAD page security, B+Tree indexing, and WAL recovery with zero runtime dependencies.</p>
+                    </div>
+                    <div class="accordion-toggle-btn">
+                        <i class='bx bx-chevron-down'></i>
+                    </div>
+                </div>
+
+                <div class="project-body">
+                    <div class="project-body-content">
+                        <div class="project-quick-tags">
+                            <span class="chip">Pure Java 17+</span>
+                            <span class="chip">Zero Dependencies</span>
+                            <span class="chip">Ascon-128 AEAD</span>
+                            <span class="chip">B+Tree Indexing</span>
+                            <span class="chip">WAL Crash Recovery</span>
+                            <span class="chip">Raw Java NIO</span>
+                            <span class="chip">Swing Inspector GUI</span>
+                        </div>
+
+                        <div class="project-overview-grid">
+                            <div class="overview-text">
+                                <h4>System Architecture & Internals</h4>
+                                <p>
+                                    Yggdrasil is an embedded storage engine built from first principles without external libraries (no Netty, no BouncyCastle, no Hibernate, no Jackson). It directly manages 4,096-byte disk pages protected with authenticated encryption.
+                                </p>
+
+                                <ul class="features-list">
+                                    <li><strong>Authenticated Page Security:</strong> 4 KiB pages encrypted with NIST-standardized Ascon-128 AEAD and cryptographically bound to page-specific associated data to prevent frame-swap attacks.</li>
+                                    <li><strong>Encrypted Metadata Layer:</strong> Page 0 stores encrypted metadata and root pointers to preserve recovery and index root state safely across reboots.</li>
+                                    <li><strong>B+Tree Indexing:</strong> Complete support for point lookups, range queries, leaf splits, and branch merges over persisted records.</li>
+                                    <li><strong>Write-Ahead Logging (WAL):</strong> Records page after-images and tuple updates; automatically detects and discards torn trailing records during recovery.</li>
+                                    <li><strong>Zero-Dependency NIO Server:</strong> Non-blocking Java NIO channels with manual byte buffer frame accumulation and custom binary protocol dispatch.</li>
+                                    <li><strong>Interactive Supervisor GUI:</strong> Built-in Swing supervisor console providing live B+Tree visualization, hexadecimal raw page inspection, and security telemetry.</li>
+                                    <li><strong>8 TiB Address Span:</strong> Physical 4 KiB layout mapped over 32-bit signed page IDs giving a logical address span of 2<sup>43</sup> bytes.</li>
+                                </ul>
+
+                                <div class="project-links-group">
+                                    <a href="https://github.com/Prabhav-dev/Yggdrasil-Blind_Storage.git" target="_blank" rel="noopener noreferrer" class="btn btn-sm">
+                                        <i class='bx bxl-github'></i> View Repository
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="overview-media">
+                                <h4>Interactive Walkthrough & Inspector Demo</h4>
+                                <div class="video-container">
+                                    <iframe 
+                                        src="https://www.youtube-nocookie.com/embed/WNGhLx-hPEU" 
+                                        title="Yggdrasil Engine Walkthrough" 
+                                        frameborder="0" 
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+                                <span class="media-caption"><i class='bx bx-play-circle'></i> Live supervisor console, B+Tree splitting & telemetry demo</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROJECT 2: JAVA-DIFF-UTILS-RS -->
+            <div class="project-card" data-accordion>
+                <div class="project-header" onclick="toggleAccordion(this)">
+                    <div class="project-title-meta">
+                        <div class="project-badge major">Major Project &bull; Systems & Algorithms</div>
+                        <h3>java-diff-utils-rs &mdash; High-Performance Rust Port</h3>
+                        <p class="project-summary-preview">Pure Rust port of upstream java-diff-utils featuring Myers diff, delta patch application, and unified diff rendering with 169/169 tests passing.</p>
+                    </div>
+                    <div class="accordion-toggle-btn">
+                        <i class='bx bx-chevron-down'></i>
+                    </div>
+                </div>
+
+                <div class="project-body">
+                    <div class="project-body-content">
+                        <div class="project-quick-tags">
+                            <span class="chip">Rust</span>
+                            <span class="chip">Myers Algorithm</span>
+                            <span class="chip">Linear-Space Myers</span>
+                            <span class="chip">169/169 Tests Passed</span>
+                            <span class="chip">Unified Diff</span>
+                            <span class="chip">Unicode Safe</span>
+                        </div>
+
+                        <div class="project-overview-grid">
+                            <div class="overview-text">
+                                <h4>Algorithmic Fidelity & Benchmark Comparisons</h4>
+                                <p>
+                                    A complete, faithful Rust port of the standard <code>java-diff-utils</code> library. Implemented the standard and linear-space Myers diff algorithms, delta generation, fuzzy chunk verification, unified diff formatting (<code>@@ -l,s +l,s @@</code>), and side-by-side presentation row rendering with Unicode grapheme cluster safety.
+                                </p>
+
+                                <div class="benchmark-box">
+                                    <div class="bench-title"><i class='bx bx-tachometer'></i> Myers Algorithm Benchmark (Issue #124 Large Dataset):</div>
+                                    <div class="bench-stats">
+                                        <div class="bench-item">
+                                            <span class="bench-val highlight">11.6s</span>
+                                            <span class="bench-label">Rust Release Port (`cargo test --release`)</span>
+                                        </div>
+                                        <div class="bench-item">
+                                            <span class="bench-val">47.0s</span>
+                                            <span class="bench-label">Java Reference Release (Myers path)</span>
+                                        </div>
+                                        <div class="bench-item">
+                                            <span class="bench-val speedup">4.05x Faster</span>
+                                            <span class="bench-label">Myers Execution Speedup</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <ul class="features-list">
+                                    <li><strong>100% Test Suite Verification:</strong> Passed all 169 / 169 tests covering algorithm units, delta patch operations, unified diff parsers, fuzzy exceptions, and HTML row generators.</li>
+                                    <li><strong>Algorithm Note & Transparency:</strong> Upstream <code>java-diff-utils</code> defaults to their Histogram algorithm on huge datasets (which runs in ~0.5ms). For the <strong>Myers diff algorithm</strong>, my Rust implementation provides a ~4.05x speedup (11.6s vs 47.0s). Adding Histogram algorithm support in Rust is on the future roadmap.</li>
+                                    <li><strong>Unicode-Aware Wrapping:</strong> Correct inline diff tag placement and grapheme cluster wrapping preventing broken surrogate pairs.</li>
+                                </ul>
+
+                                <div class="project-notice">
+                                    <i class='bx bx-info-circle'></i>
+                                    <div>
+                                        <strong>Video & Optimization Roadmap:</strong> A video demonstration will be uploaded in a few days covering updated optimizations and the roadmap for Histogram diff algorithm integration.
+                                    </div>
+                                </div>
+
+                                <div class="project-links-group">
+                                    <a href="https://github.com/Prabhav-dev" target="_blank" rel="noopener noreferrer" class="btn btn-sm">
+                                        <i class='bx bxl-github'></i> View on GitHub
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="overview-media">
+                                <h4>Test Suite Verification Breakdown</h4>
+                                <div class="test-table-container">
+                                    <table class="test-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Module</th>
+                                                <th>Passed</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr><td>algorithm.rs</td><td>10 / 10</td><td><span class="status-pass">PASSED</span></td></tr>
+                                            <tr><td>diff_utils_test.rs</td><td>6 / 6</td><td><span class="status-pass">PASSED</span></td></tr>
+                                            <tr><td>patch.rs</td><td>8 / 8</td><td><span class="status-pass">PASSED</span></td></tr>
+                                            <tr><td>unifieddiff.rs</td><td>42 / 42</td><td><span class="status-pass">PASSED</span></td></tr>
+                                            <tr><td>text.rs (HTML tags)</td><td>52 / 52</td><td><span class="status-pass">PASSED</span></td></tr>
+                                            <tr><td>integration_tests.rs</td><td>36 / 36</td><td><span class="status-pass">PASSED</span></td></tr>
+                                            <tr class="table-total"><td>Total Passing</td><td>169 / 169</td><td><span class="status-pass">100% PASS</span></td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROJECT 3: YGGDRASIL MEMORY LAYER -->
+            <div class="project-card" data-accordion>
+                <div class="project-header" onclick="toggleAccordion(this)">
+                    <div class="project-title-meta">
+                        <div class="project-badge major">Major Project &bull; Architecture Concept & Prototype</div>
+                        <h3>Yggdrasil Memory Layer &mdash; Embedded AI Agent Memory</h3>
+                        <p class="project-summary-preview">Embedded, token-efficient long-term persistent memory architecture for LLM agents utilizing Yggdrasil B+Tree storage and diff-based delta compression.</p>
+                    </div>
+                    <div class="accordion-toggle-btn">
+                        <i class='bx bx-chevron-down'></i>
+                    </div>
+                </div>
+
+                <div class="project-body">
+                    <div class="project-body-content">
+                        <div class="project-quick-tags">
+                            <span class="chip">LLM Memory</span>
+                            <span class="chip">Zero-Cloud Dependency</span>
+                            <span class="chip">Fidelity Tiering</span>
+                            <span class="chip">Myers Delta Compression</span>
+                            <span class="chip">B+Tree Storage</span>
+                            <span class="chip">Model Agnostic</span>
+                        </div>
+
+                        <div class="project-overview-grid">
+                            <div class="overview-text">
+                                <h4>Addressing LLM Context Limits Without External Vector SaaS</h4>
+                                <p>
+                                    Modern AI agents suffer from a dilemma: either forget context between turns, or burn excessive tokens and network hops piping full conversational context into external hosted vector DB services (Pinecone, Weaviate). The Yggdrasil Memory Layer solves this by embedding zero-external-dependency local storage directly alongside the application.
+                                </p>
+
+                                <ul class="features-list">
+                                    <li><strong>Dual Fidelity Architecture:</strong>
+                                        <ul>
+                                            <li><em>Lossy Path (Natural Language):</em> Embeds, tags (recency, cluster), and summarizes conversational dialogue.</li>
+                                            <li><em>Near-Lossless Path (Code & Structured Data):</em> Code changes are diffed using <code>java-diff-utils-rs</code> and stored as strict Myers deltas, preventing silent LLM hallucination of syntax or function signatures.</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>3-Tier Compression Lifecycle:</strong>
+                                        <ul>
+                                            <li><em>Tier 1 (Raw):</em> Recent, full-fidelity turn records.</li>
+                                            <li><em>Tier 2 (Summary):</em> Aging entries compressed via diff-based delta against prior states.</li>
+                                            <li><em>Tier 3 (Cluster Gist):</em> Archived memories merged into compact cluster-level semantic gists.</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>Library-First & Model Agnostic:</strong> Operates entirely offline with an optional lightweight API wrapper for local agent deployment.</li>
+                                </ul>
+
+                                <div class="project-links-group">
+                                    <a href="https://github.com/Prabhav-dev" target="_blank" rel="noopener noreferrer" class="btn btn-sm">
+                                        <i class='bx bxl-github'></i> Explore Architecture
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="overview-media">
+                                <h4>Fidelity-Tiering Memory Model</h4>
+                                <div class="tier-diagram-box">
+                                    <div class="tier-level tier-1">
+                                        <div class="tier-badge-pill">Tier 1 &bull; Raw</div>
+                                        <span>Full Fidelity Context &bull; Instant Lookup</span>
+                                    </div>
+                                    <div class="tier-arrow"><i class='bx bx-down-arrow-alt'></i> Aging & Myers Diff Delta Compression</div>
+                                    <div class="tier-level tier-2">
+                                        <div class="tier-badge-pill">Tier 2 &bull; Delta Summary</div>
+                                        <span>Diff-compressed code & aggregated dialogue turns</span>
+                                    </div>
+                                    <div class="tier-arrow"><i class='bx bx-down-arrow-alt'></i> Semantic Clustering</div>
+                                    <div class="tier-level tier-3">
+                                        <div class="tier-badge-pill">Tier 3 &bull; Cluster Gist</div>
+                                        <span>High-density long-term memory summaries</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 2. MINOR & BACKEND PROJECTS -->
+        <div class="project-tier-header second-tier">
+            <span class="tier-badge minor"><i class='bx bx-code-curly'></i> Applied Engineering & Prototypes</span>
+            <h3>Full-Stack & Applied Tools</h3>
+        </div>
+
+        <div class="minor-projects-grid">
+            
+            <!-- MINOR 1: IDEA_VOLTEX -->
+            <div class="minor-card">
+                <div class="minor-card-header">
+                    <i class='bx bx-shield-alt-2 minor-icon'></i>
+                    <div class="minor-meta">
+                        <h4>IDEA_VOLTEX</h4>
+                        <span class="minor-tag">Zero-Trust Transaction Engine</span>
+                    </div>
+                </div>
+                <p>High-performance digital transaction architecture featuring NIST Ascon-128 AEAD, deterministic blind indexing (decoupling user identities from stored records), Argon2 memory-hard key derivation, and MongoDB Atlas encryption at rest.</p>
+                <div class="minor-chips">
+                    <span>Java 21</span>
+                    <span>Spring Boot 3.4.3</span>
+                    <span>Ascon-128</span>
+                    <span>Blind Index</span>
+                </div>
+            </div>
+
+            <!-- MINOR 2: AADDELLIUS -->
+            <div class="minor-card">
+                <div class="minor-card-header">
+                    <i class='bx bx-bot minor-icon'></i>
+                    <div class="minor-meta">
+                        <h4>Aaddellius Platform</h4>
+                        <span class="minor-tag">Full-Stack AI Spring Boot App</span>
+                    </div>
+                </div>
+                <p>Full-stack web application integrating modern Google Cloud AI platform APIs (conversational chat engine and text-to-image synthesis) with Spring Data JPA Hibernate persistence, MySQL, and dynamic Thymeleaf UI templates.</p>
+                <div class="minor-chips">
+                    <span>Java 21</span>
+                    <span>Spring Boot 3.2.5</span>
+                    <span>Cloud AI</span>
+                    <span>MySQL</span>
+                </div>
+            </div>
+
+            <!-- MINOR 3: PS-09 SPATIAL API -->
+            <div class="minor-card">
+                <div class="minor-card-header">
+                    <i class='bx bx-map-pin minor-icon'></i>
+                    <div class="minor-meta">
+                        <h4>PS-09 Spatial NER API</h4>
+                        <span class="minor-tag">Place-Name Extraction & Disambiguation</span>
+                    </div>
+                </div>
+                <p>Robust place-name extraction and canonical gazetteer mapping pipeline using spaCy NLP entity extraction, local GeoNames candidate scoring, Nominatim fallback queries, and deterministic confidence calculation.</p>
+                <div class="minor-chips">
+                    <span>Python</span>
+                    <span>spaCy</span>
+                    <span>GeoNames</span>
+                    <span>RapidFuzz</span>
+                </div>
+            </div>
+
+            <!-- MINOR 4: RETRO TEXT GAME -->
+            <div class="minor-card">
+                <div class="minor-card-header">
+                    <i class='bx bx-joystick minor-icon'></i>
+                    <div class="minor-meta">
+                        <h4>Retro Text Adventure</h4>
+                        <span class="minor-tag">Acoustic Typewriter Game Engine</span>
+                    </div>
+                </div>
+                <p>First foundational programming project: interactive Python narrative adventure featuring character-by-character typewriter rendering, real-time keyboard audio synthesis with Pygame, and modular branching storylines.</p>
+                <div class="minor-chips">
+                    <span>Python 3</span>
+                    <span>Pygame Audio</span>
+                    <span>State Loop</span>
+                </div>
+                <div class="minor-link-wrap">
+                    <a href="https://github.com/Demolisher-hero/A-simple-text-based-game-with-typing-writing-effect.git" target="_blank" rel="noopener noreferrer" class="minor-link">
+                        <i class='bx bxl-github'></i> GitHub Repo &rarr;
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!--CONTACT SECTION WITH THREE.JS GLOBE-->
     <section class="contact-globe" id="contact">
         <div class="contact-container">
             <div class="contact-box">
+                <div class="hero-tag"><span>$</span> contact --ping</div>
                 <h2>Get In <span>Touch</span></h2>
+                <p class="contact-sub">Interested in discussing distributed systems, storage engine internals, or low-level engineering opportunities? Send a message directly.</p>
                 
                 <!-- Serverless Contact Form -->
                 <form id="contact-form">
                     <input type="text" id="contact-name" name="name" placeholder="Full Name" required>
                     <input type="email" id="contact-email" name="email" placeholder="Email Address" required>
-                    <textarea id="contact-message" name="message" cols="30" rows="10" placeholder="Your Message" required></textarea>
+                    <textarea id="contact-message" name="message" cols="30" rows="6" placeholder="Your Message" required></textarea>
                     
                     <!-- Web3Forms Free Honeypot Bot Prevention -->
                     <input type="checkbox" name="botcheck" style="display: none;">
 
-                    <button type="submit" class="btn">Send Message</button>
+                    <button type="submit" class="btn">Send Message <i class='bx bx-send'></i></button>
+                    <div id="form-feedback" class="form-feedback"></div>
                 </form>
 
-                <a href="#home" class="know-more">Back to the start? ↑</a>
+                <div class="contact-direct-links">
+                    <a href="https://github.com/Prabhav-dev" target="_blank" rel="noopener noreferrer"><i class='bx bxl-github'></i> github.com/Prabhav-dev</a>
+                    <a href="https://www.linkedin.com/in/prabhav-dwiwedi-283839348/" target="_blank" rel="noopener noreferrer"><i class='bx bxl-linkedin'></i> linkedin.com/in/prabhav-dwiwedi</a>
+                </div>
+
+                <a href="#home" class="know-more">Back to top &uarr;</a>
             </div>
-            <div class="globe-area" id="earth-container"></div>
+            
+            <div class="globe-area">
+                <div id="earth-container"></div>
+                <span class="globe-caption">Network Telemetry & Node Visualizer</span>
+            </div>
         </div>
     </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-text">
+            <p>&copy; 2026 Prabhav Dwiwedi &bull; Systems & Low-Level Backend Architecture</p>
+        </div>
+        <div class="footer-iconTop">
+            <a href="#home"><i class='bx bx-up-arrow-alt'></i></a>
+        </div>
+    </footer>
 
     <!--SCRIPTS / LIBRARIES -->    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>

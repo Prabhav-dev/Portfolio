@@ -1,6 +1,9 @@
-/* Updated about-tree.js */
+/* ==========================================================================
+   ABOUT-TREE.JS — INTERACTIVE TREE WITH VIBRANT GRADIENTS & PARALLAX SCROLL FADE
+   ========================================================================== */
 const canvas = document.getElementById('treeCanvas');
-const ctx = canvas.getContext('2d');
+const ctx = canvas ? canvas.getContext('2d') : null;
+const overlayShade = document.getElementById('tree-overlay-shade');
 
 let treeData = null;
 let animProgress = 0;
@@ -16,30 +19,19 @@ let resizeDebounceId = null;
 let isPageVisible = true;
 
 const PORTFOLIO_NODES = [
-  { title: "Foundations", detail: "Pursuing a Bachelor's in Computer Engineering with a core focus on Data Structures, Algorithms, and CS fundamentals." },
-  { title: "Backend Systems", detail: "Built foundational skills in Rust and the Java Spring framework for building scalable backend services." },
-  { title: "Low-Level Infra", detail: "Engineered prototypes for a custom B+ Tree storage engine and a manual database ledger architecture." },
-  { title: "Hardware", detail: "Foundational knowledge in Digital Logic, COA, 8086 Microprocessor, Theory of Computation, and Compiler Design." },
-  { title: "Space Tech", detail: "Developed a Python pipeline fetching Google Earth Engine satellite imagery for spatial impact analysis." },
-  { title: "Conversion", detail: "Contributed to open-source by porting java-diff-utils to Rust while maintaining full test suite compliance." },
-  { title: "Systems Prog", detail: "Focused on low-level memory programming, regex engines, and parallel distributed systems." },
-  { title: "Cyber Security", detail: "Honours and Minor in Cyber Security; practical experience deploying ASCON-128 and Argon2 cryptography." },
-  { title: "Artificial Intelligence", detail: "Minor in Artificial Intelligence; hands-on experience implementing custom algorithms like Myers diff and Union-Find." }
+  { title: "Foundations", detail: "Core CS rigor: Data Structures, Algorithms, Computer Organization, 8086 Assembly, and Compiler Design." },
+  { title: "Storage Engines", detail: "Engineered Yggdrasil: zero-dependency 4 KiB slotted-page B+Tree engine with WAL crash recovery." },
+  { title: "Systems in Rust", detail: "Ported java-diff-utils to pure Rust: Myers diff, delta patching, and unified diffs with 169/169 test pass." },
+  { title: "Cyber Security", detail: "Honours & Minor in Cyber Security: NIST Ascon-128 AEAD authenticated page framing and Argon2." },
+  { title: "AI & Memory", detail: "Minor in Artificial Intelligence: Fidelity-tiered embedded LLM memory layer without external vector DBs." },
+  { title: "NIO Sockets", detail: "Zero-copy non-blocking Java NIO wire protocols, custom frame accumulators, and multiplexing." },
+  { title: "Space Tech", detail: "Python spatial data pipeline leveraging Google Earth Engine satellite imagery for change detection." },
+  { title: "Zero-Trust Web", detail: "IDEA_VOLTEX: deterministic blind indexing and secure digital transaction pipelines in Spring Boot 3.4." },
+  { title: "Telemetry GUI", detail: "Live Swing visual supervisor console for hexadecimal page inspection, B+Tree splits, and metrics." }
 ];
 
-function getThemeColors() {
-    const isLight = document.body.classList.contains('light-mode');
-    return {
-        branchColor: isLight ? '#754ef9' : '#b892ff',
-        purpleGlow: isLight ? '#a78bfa' : '#754ef9',
-        whiteGlow: '#ffffff',
-        nodeBg: isLight ? '#754ef9' : '#9333ea',
-        nodeBorder: '#ffffff',
-        nodeText: '#ffffff'
-    };
-}
-
 function resizeCanvas() {
+    if (!canvas) return;
     const dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.25 : 2);
     canvas.width = window.innerWidth * dpr;
     canvas.height = window.innerHeight * dpr;
@@ -51,29 +43,28 @@ function resizeCanvas() {
 }
 
 function buildTreeStructure() {
+    if (!canvas) return;
     const w = window.innerWidth;
     const h = window.innerHeight;
 
     const startX = w * 0.5;
-    const startY = h * 0.88;
+    // Lowered slightly to provide ample breathing room at the top
+    const startY = h * 0.90;
     
-    // Proportional scaling: drastically lower the base scale on mobile 
-    // so the naturally wide tree fits without needing vertical distortion.
     const scale = isMobile 
-        ? Math.min(w / 750, h / 800) 
+        ? Math.min(w / 720, h / 780) 
         : Math.min(w / 1200, h / 950);
 
     const groundLine = {
-        x1: w * (isMobile ? 0.05 : 0.15),
+        x1: w * (isMobile ? 0.08 : 0.15),
         y1: startY,
-        x2: w * (isMobile ? 0.95 : 0.85),
+        x2: w * (isMobile ? 0.92 : 0.85),
         y2: startY,
-        width: 3 * scale
+        width: 3.5 * scale
     };
 
     function createBranch(x1, y1, angle, length, width, depth, maxDepth, startProg) {
-        // Reverted inward steering. Let the tree branch naturally.
-        const bend = (Math.random() - 0.5) * 0.25;
+        const bend = (Math.random() - 0.5) * 0.22;
         const midAngle = angle + bend;
 
         const cpX = x1 + (length * 0.5) * Math.cos(midAngle);
@@ -87,7 +78,6 @@ function buildTreeStructure() {
 
         if (depth < maxDepth) {
             const branchCount = depth === 0 ? 3 : (Math.random() > 0.35 ? 2 : 3);
-            // Maintain the same natural spread for both PC and mobile
             const spread = 0.65 + Math.random() * 0.35;
 
             for (let i = 0; i < branchCount; i++) {
@@ -109,7 +99,7 @@ function buildTreeStructure() {
         };
     }
 
-    const stemHeight = 220 * scale;
+    const stemHeight = 210 * scale;
     const stemWidth = 18 * scale; 
     
     const rootTrunk = createBranch(startX, startY - (stemWidth / 2), Math.PI / 2, stemHeight, stemWidth, 0, 4, 0);
@@ -128,27 +118,25 @@ function buildTreeStructure() {
     const placedBoxCoords = [];
     let infoIndex = 0;
     
-    // Slightly smaller font on mobile to prevent pill overlaps
     ctx.font = isMobile ? 'bold 8.5px sans-serif' : 'bold 9.5px sans-serif'; 
 
-    const gap = isMobile ? 3 : 12;
-    const topMargin = isMobile ? 50 : 90;
-    const sideMargin = isMobile ? 10 : 40;
+    const gap = isMobile ? 4 : 12;
+    const topMargin = isMobile ? 60 : 80;
+    const sideMargin = isMobile ? 12 : 40;
 
     leafNodes.forEach(leaf => {
         if (infoIndex >= PORTFOLIO_NODES.length) return; 
 
         const candidateInfo = PORTFOLIO_NODES[infoIndex];
         const textMetrics = ctx.measureText(candidateInfo.title);
-        const btnWidth = textMetrics.width + 16; 
-        const btnHeight = 20;
+        const btnWidth = textMetrics.width + 18; 
+        const btnHeight = 22;
 
         const btnLeft = leaf.endX - btnWidth / 2;
         const btnRight = leaf.endX + btnWidth / 2;
         const btnTop = leaf.endY - btnHeight / 2;
         const btnBottom = leaf.endY + btnHeight / 2;
 
-        // Ensure target leaf natively fits within bounds
         if (btnLeft < sideMargin || btnRight > w - sideMargin || btnTop < topMargin || btnBottom > h - 40) {
             return; 
         }
@@ -167,11 +155,9 @@ function buildTreeStructure() {
         }
     });
 
-    // Gentle fallback pass for any remaining nodes if collision was too strict
     if (infoIndex < PORTFOLIO_NODES.length) {
         leafNodes.forEach(leaf => {
             if (infoIndex >= PORTFOLIO_NODES.length || leaf.info) return;
-            // Only assign if the leaf isn't blatantly off-screen
             if (leaf.endX > sideMargin && leaf.endX < w - sideMargin) {
                 leaf.info = PORTFOLIO_NODES[infoIndex];
                 infoIndex++;
@@ -179,32 +165,45 @@ function buildTreeStructure() {
         });
     }
 
-    treeData = { groundLine, rootTrunk, scale };
+    treeData = { groundLine, rootTrunk, scale, width: w, height: h };
 }
 
 function drawTree(progress) {
-    if (!treeData) return;
+    if (!treeData || !ctx) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    const colors = getThemeColors();
+    const isLight = document.body.classList.contains('light-mode');
     const pulseFactor = (Math.sin(pulseTime) + 1) / 2;
-    const glowMax = isMobile ? 4 : 18;
-    const glowRadius = (isMobile ? 2 : 10) + pulseFactor * glowMax;
+    const glowMax = isMobile ? 6 : 20;
+    const glowRadius = (isMobile ? 3 : 10) + pulseFactor * glowMax;
     const coreBrightness = 0.5 + pulseFactor * 0.5;
 
     const gl = treeData.groundLine;
     const currentGroundX2 = gl.x1 + (gl.x2 - gl.x1) * Math.min(1, progress * 2.5);
 
+    // Ground Line with Gradient
     ctx.save();
+    const groundGrad = ctx.createLinearGradient(gl.x1, gl.y1, gl.x2, gl.y2);
+    if (isLight) {
+        groundGrad.addColorStop(0, 'rgba(99, 54, 228, 0.2)');
+        groundGrad.addColorStop(0.5, '#6336e4');
+        groundGrad.addColorStop(1, 'rgba(2, 132, 199, 0.2)');
+    } else {
+        groundGrad.addColorStop(0, 'rgba(117, 78, 249, 0.2)');
+        groundGrad.addColorStop(0.3, '#754ef9');
+        groundGrad.addColorStop(0.7, '#00f0ff');
+        groundGrad.addColorStop(1, 'rgba(0, 240, 255, 0.2)');
+    }
+
     ctx.beginPath();
     ctx.moveTo(gl.x1, gl.y1);
     ctx.lineTo(currentGroundX2, gl.y2);
 
     if (!isMobile) {
-        ctx.shadowColor = pulseFactor > 0.5 ? colors.purpleGlow : colors.whiteGlow;
+        ctx.shadowColor = pulseFactor > 0.5 ? (isLight ? '#8967ff' : '#00f0ff') : '#754ef9';
         ctx.shadowBlur = glowRadius;
     }
-    ctx.strokeStyle = colors.branchColor;
+    ctx.strokeStyle = groundGrad;
     ctx.lineWidth = gl.width;
     ctx.lineCap = 'round';
     ctx.stroke();
@@ -212,10 +211,23 @@ function drawTree(progress) {
     ctx.beginPath();
     ctx.moveTo(gl.x1, gl.y1);
     ctx.lineTo(currentGroundX2, gl.y2);
-    ctx.strokeStyle = `rgba(255, 255, 255, ${coreBrightness * 0.7})`;
+    ctx.strokeStyle = `rgba(255, 255, 255, ${coreBrightness * 0.75})`;
     ctx.lineWidth = 1;
     ctx.stroke();
     ctx.restore();
+
+    // Reusable vertical branch gradient from root to canopy
+    const branchGrad = ctx.createLinearGradient(treeData.width * 0.5, gl.y1, treeData.width * 0.5, treeData.height * 0.1);
+    if (isLight) {
+        branchGrad.addColorStop(0, '#6336e4');
+        branchGrad.addColorStop(0.5, '#8b5cf6');
+        branchGrad.addColorStop(1, '#0284c7');
+    } else {
+        branchGrad.addColorStop(0, '#754ef9');
+        branchGrad.addColorStop(0.4, '#a855f7');
+        branchGrad.addColorStop(0.8, '#38bdf8');
+        branchGrad.addColorStop(1, '#00f0ff');
+    }
 
     function drawBranch(node) {
         const localProgress = Math.max(0, Math.min(1, (progress - node.startProgress) / node.duration));
@@ -226,27 +238,29 @@ function drawTree(progress) {
         const currentEndX = node.x1 + (node.endX - node.x1) * localProgress;
         const currentEndY = node.y1 + (node.endY - node.y1) * localProgress;
 
+        // Outer glowing gradient branch
         ctx.save();
         ctx.beginPath();
         ctx.moveTo(node.x1, node.y1);
         ctx.quadraticCurveTo(currentCpX, currentCpY, currentEndX, currentEndY);
 
         if (!isMobile) {
-            ctx.shadowColor = pulseFactor > 0.5 ? colors.purpleGlow : colors.whiteGlow;
+            ctx.shadowColor = pulseFactor > 0.5 ? (isLight ? '#8967ff' : '#00f0ff') : '#754ef9';
             ctx.shadowBlur = glowRadius;
         }
-        ctx.strokeStyle = colors.branchColor;
+        ctx.strokeStyle = branchGrad;
         ctx.lineWidth = node.width;
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
         ctx.stroke();
         ctx.restore();
 
+        // Inner glowing filament core
         ctx.save();
         ctx.beginPath();
         ctx.moveTo(node.x1, node.y1);
         ctx.quadraticCurveTo(currentCpX, currentCpY, currentEndX, currentEndY);
-        ctx.strokeStyle = `rgba(255, 255, 255, ${coreBrightness * 0.65})`;
+        ctx.strokeStyle = `rgba(255, 255, 255, ${coreBrightness * 0.7})`;
         ctx.lineWidth = Math.max(0.8, node.width * 0.22);
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
@@ -258,29 +272,39 @@ function drawTree(progress) {
         }
 
         if (localProgress >= 1 && node.info) {
-            drawInteractiveTip(node.endX, node.endY, node.info, colors, pulseFactor);
+            drawInteractiveTip(node.endX, node.endY, node.info, pulseFactor, isLight);
         }
     }
 
     drawBranch(treeData.rootTrunk);
 }
 
-function drawInteractiveTip(x, y, info, colors, pulseFactor) {
+function drawInteractiveTip(x, y, info, pulseFactor, isLight) {
     ctx.save();
 
     ctx.font = isMobile ? 'bold 8.5px sans-serif' : 'bold 9.5px sans-serif';
     const textMetrics = ctx.measureText(info.title);
-    const btnWidth = textMetrics.width + 16; 
-    const btnHeight = 20;
+    const btnWidth = textMetrics.width + 18; 
+    const btnHeight = 22;
     
-    // Reverted hard clamping. Text draws exactly at the natural branch end.
     const btnX = x - btnWidth / 2;
     const btnY = y - btnHeight / 2;
-    const radius = 10;
+    const radius = 11;
+
+    // Gradient fill for interactive node pill
+    const nodeGrad = ctx.createLinearGradient(btnX, btnY, btnX + btnWidth, btnY + btnHeight);
+    if (isLight) {
+        nodeGrad.addColorStop(0, '#6336e4');
+        nodeGrad.addColorStop(1, '#0284c7');
+    } else {
+        nodeGrad.addColorStop(0, '#754ef9');
+        nodeGrad.addColorStop(0.5, '#9333ea');
+        nodeGrad.addColorStop(1, '#0284c7');
+    }
 
     if (!isMobile) {
-        ctx.shadowColor = colors.whiteGlow;
-        ctx.shadowBlur = 10 + pulseFactor * 8;
+        ctx.shadowColor = isLight ? '#8967ff' : '#00f0ff';
+        ctx.shadowBlur = 10 + pulseFactor * 10;
     }
 
     ctx.beginPath();
@@ -289,22 +313,22 @@ function drawInteractiveTip(x, y, info, colors, pulseFactor) {
     } else {
         ctx.rect(btnX, btnY, btnWidth, btnHeight);
     }
-    ctx.fillStyle = colors.nodeBg;
+    ctx.fillStyle = nodeGrad;
     ctx.fill();
 
-    ctx.strokeStyle = colors.nodeBorder;
-    ctx.lineWidth = 1.2;
+    // Crisp node border
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 1.3;
     ctx.stroke();
 
     ctx.shadowBlur = 0;
-    ctx.fillStyle = colors.nodeText;
+    ctx.fillStyle = '#ffffff';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(info.title, x, y + 0.5);
 
     ctx.restore();
 
-    // Map hitboxes natively to X and Y
     info.x = x;
     info.y = y;
     info.w = btnWidth;
@@ -364,67 +388,69 @@ function findNodeAt(canvasX, canvasY) {
     return found;
 }
 
-window.addEventListener('mousemove', (e) => {
-    if (!treeData || animProgress < 1) return;
+if (canvas) {
+    window.addEventListener('mousemove', (e) => {
+        if (!treeData || animProgress < 1) return;
 
-    const rect = canvas.getBoundingClientRect();
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
+        const rect = canvas.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
 
-    const hoveredNode = findNodeAt(mouseX, mouseY);
+        const hoveredNode = findNodeAt(mouseX, mouseY);
 
-    if (hoveredNode) {
-        canvas.style.cursor = 'pointer';
-        if (currentHoveredNode !== hoveredNode) {
-            currentHoveredNode = hoveredNode;
-            showInfoCard(hoveredNode, e.clientX, e.clientY);
-        } else if (activeInfoCard) {
-            positionInfoCard(e.clientX, e.clientY);
-        }
-    } else {
-        canvas.style.cursor = 'default';
-        if (currentHoveredNode !== null) {
-            currentHoveredNode = null;
-            hideInfoCard();
-        }
-    }
-});
-
-canvas.addEventListener('touchstart', (e) => {
-    if (!treeData || animProgress < 1) return;
-
-    const touch = e.touches[0];
-    const rect = canvas.getBoundingClientRect();
-    const touchX = touch.clientX - rect.left;
-    const touchY = touch.clientY - rect.top;
-
-    const tappedNode = findNodeAt(touchX, touchY);
-
-    if (tappedNode) {
-        e.preventDefault();
-        if (currentHoveredNode === tappedNode && activeInfoCard) {
-            currentHoveredNode = null;
-            hideInfoCard();
+        if (hoveredNode) {
+            canvas.style.cursor = 'pointer';
+            if (currentHoveredNode !== hoveredNode) {
+                currentHoveredNode = hoveredNode;
+                showInfoCard(hoveredNode, e.clientX, e.clientY);
+            } else if (activeInfoCard) {
+                positionInfoCard(e.clientX, e.clientY);
+            }
         } else {
-            currentHoveredNode = tappedNode;
-            showInfoCard(tappedNode, touch.clientX, touch.clientY);
+            canvas.style.cursor = 'default';
+            if (currentHoveredNode !== null) {
+                currentHoveredNode = null;
+                hideInfoCard();
+            }
         }
-    } else if (currentHoveredNode !== null) {
-        currentHoveredNode = null;
-        hideInfoCard();
-    }
-}, { passive: false });
+    });
 
-canvas.addEventListener('click', (e) => {
-    if (animProgress < 1) return;
+    canvas.addEventListener('touchstart', (e) => {
+        if (!treeData || animProgress < 1) return;
 
-    const rect = canvas.getBoundingClientRect();
-    const clickX = e.clientX - rect.left;
-    const clickY = e.clientY - rect.top;
+        const touch = e.touches[0];
+        const rect = canvas.getBoundingClientRect();
+        const touchX = touch.clientX - rect.left;
+        const touchY = touch.clientY - rect.top;
 
-    if (findNodeAt(clickX, clickY)) return;
-    startTreeAnimation();
-});
+        const tappedNode = findNodeAt(touchX, touchY);
+
+        if (tappedNode) {
+            e.preventDefault();
+            if (currentHoveredNode === tappedNode && activeInfoCard) {
+                currentHoveredNode = null;
+                hideInfoCard();
+            } else {
+                currentHoveredNode = tappedNode;
+                showInfoCard(tappedNode, touch.clientX, touch.clientY);
+            }
+        } else if (currentHoveredNode !== null) {
+            currentHoveredNode = null;
+            hideInfoCard();
+        }
+    }, { passive: false });
+
+    canvas.addEventListener('click', (e) => {
+        if (animProgress < 1) return;
+
+        const rect = canvas.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const clickY = e.clientY - rect.top;
+
+        if (findNodeAt(clickX, clickY)) return;
+        startTreeAnimation();
+    });
+}
 
 function positionInfoCard(clientX, clientY) {
     if (!activeInfoCard) return;
@@ -478,6 +504,27 @@ function hideInfoCard() {
     }
 }
 
+/* ==========================================================================
+   PARALLAX SCROLL FADE HANDLER
+   ========================================================================== */
+function handleParallaxFade() {
+    const scrollY = window.scrollY || window.pageYOffset;
+    const heroHeight = window.innerHeight * 0.75;
+    
+    // Calculate fade factor (0 at top, 1 when scrolled down past hero)
+    const fadeRatio = Math.min(1, Math.max(0, scrollY / heroHeight));
+
+    if (canvas) {
+        canvas.style.opacity = (1 - fadeRatio * 0.95).toFixed(3);
+    }
+
+    if (overlayShade) {
+        overlayShade.style.opacity = (fadeRatio * 0.94).toFixed(3);
+    }
+}
+
+window.addEventListener('scroll', handleParallaxFade, { passive: true });
+
 window.addEventListener('resize', () => {
     if (isMobile && window.innerWidth === lastWidth) return;
 
@@ -510,16 +557,18 @@ window.addEventListener('load', () => {
 
     resizeCanvas();
     startTreeAnimation();
+    handleParallaxFade();
 
     if (typeof ScrollReveal !== 'undefined') {
         const sr = ScrollReveal({
-            distance: '60px',
-            duration: 2000,
-            delay: 200,
+            distance: '50px',
+            duration: 1200,
+            delay: 150,
             reset: false
         });
 
-        sr.reveal('.about-hero h1', { origin: 'top' });
-        sr.reveal('.exp-box', { interval: 200, origin: 'right' });
+        sr.reveal('.about-section-header', { origin: 'top' });
+        sr.reveal('.pillar-card', { interval: 150, origin: 'bottom' });
+        sr.reveal('.exp-box', { interval: 150, origin: 'right' });
     }
 });

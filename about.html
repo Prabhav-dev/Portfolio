@@ -3,71 +3,220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About | Cold Lich</title>
+    <title>About Me | Prabhav Dwiwedi</title>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="about.css">
 </head>
 <body class="dark-mode">
     
-    <div class="tree-background">
+    <!-- PARALLAX INTERACTIVE TREE BACKGROUND -->
+    <div class="tree-background" id="tree-bg-wrap">
         <canvas id="treeCanvas"></canvas>
+        <div class="tree-overlay-shade" id="tree-overlay-shade"></div>
     </div>
 
+    <!-- HEADER / NAVBAR -->
     <header class="header sticky">
-        <a href="index.html" class="logo">Portfolio.</a>
+        <a href="index.html" class="logo">Portfolio<span>.</span></a>
         <nav class="navbar">
-            <a href="index.html">Home</a>
-            <a href="about.html" class="active">About me</a>
-            <a href="index.html#specialization">Focus</a>
+            <a href="index.html#about">Focus</a>
+            <a href="index.html#projects">Projects</a>
+            <a href="about.html" class="active">Tree Graph</a>
             <a href="index.html#contact">Contact</a>
         </nav>
         <div class="bx bx-moon" id="darkMode-icon"></div>
     </header>
 
     <main>
+        <!-- BLANK HERO VIEWPORT TO FULLY SHOWCASE THE INTERACTIVE TREE -->
         <section class="about-hero">
             <h1 class="heading"><span></span></h1>
         </section>
 
-        <section class="experience">
-            <div class="timeline">
-                <div class="timeline-line"></div>
+        <!-- DEEP ARCHITECTURAL PILLARS (4 EXPANDED CARDS) -->
+        <section class="experience" id="pillars">
+            <div class="about-section-header">
+                <span class="tier-badge"><i class='bx bx-terminal'></i> Engineering Pillars</span>
+                <h2 class="heading">Core Technical <span>Tracks</span></h2>
+                <p class="section-subtitle">Core engineering areas, architecture decisions, and academic background</p>
+            </div>
 
-                <div class="exp-item">
-                    <div class="exp-dot"></div>
-                    <div class="exp-box">
-                        <h3>University Entry</h3>
-                        <p>Began the journey into Shree L.r Tiwari College of Engineering.</p>
+            <div class="cards-grid">
+                
+                <!-- CARD 1: FOUNDATION & ENGINEERING CORE -->
+                <div class="pillar-card">
+                    <div class="pillar-card-top">
+                        <div class="pillar-num">01</div>
+                        <div class="pillar-icon-box"><i class='bx bx-chip'></i></div>
+                    </div>
+                    <h3>Foundation & Engineering Core</h3>
+                    <p class="pillar-lead">Computer Science fundamentals rooted in hardware-software co-design, algorithmic efficiency, and memory architectures.</p>
+                    
+                    <div class="pillar-discussion">
+                        <h4>Internal Design & Philosophy:</h4>
+                        <p>
+                            Rigorous focus on core CS fundamentals: Data Structures, Analysis of Algorithms, Digital Logic, Computer Organization & Architecture (COA), 8086 Microprocessor architecture, Theory of Computation (automata & formal languages), and Compiler Design.
+                        </p>
+                        <p>
+                            Emphasizing deterministic execution models, cache locality (L1/L2/L3 hierarchy awareness), branch prediction optimization, and asymptotic space-time trade-offs over brute-force abstractions.
+                        </p>
+                    </div>
+
+                    <div class="pillar-specs">
+                        <span class="pill-chip">Data Structures & Algo</span>
+                        <span class="pill-chip">Computer Architecture</span>
+                        <span class="pill-chip">8086 Assembly</span>
+                        <span class="pill-chip">Compiler Theory</span>
                     </div>
                 </div>
 
-                <div class="exp-item">
-                    <div class="exp-dot"></div>
-                    <div class="exp-box">
-                        <h3>Full Stack Core</h3>
-                        <p>Developed expertise in Spring Boot and modern frontend integration.</p>
+                <!-- CARD 2: SYSTEMS PROGRAMMING & STORAGE ENGINES -->
+                <div class="pillar-card">
+                    <div class="pillar-card-top">
+                        <div class="pillar-num">02</div>
+                        <div class="pillar-icon-box"><i class='bx bx-data'></i></div>
+                    </div>
+                    <h3>Systems Programming & Storage Engines</h3>
+                    <p class="pillar-lead">Bare-metal storage engine internals, page layout engineering, non-blocking I/O, and linear-space diff algorithms.</p>
+                    
+                    <div class="pillar-discussion">
+                        <h4>Internal Design & Philosophy:</h4>
+                        <p>
+                            Building disk-resident database engines from scratch without third-party frameworks. Implementation of 4 KiB slotted-page heaps, manual page-pinning buffer managers, write-ahead logging (WAL) with torn-page detection, and B+Tree indexing with dynamic split/merge heuristics.
+                        </p>
+                        <p>
+                            High-performance systems programming in Rust and modern Java: implementing Myers diff algorithms, delta patch engines with fuzzy chunk verification, zero-copy frame accumulators, and non-blocking raw Java NIO sockets with custom binary protocols.
+                        </p>
+                    </div>
+
+                    <div class="pillar-specs">
+                        <span class="pill-chip">B+Tree Indexing</span>
+                        <span class="pill-chip">WAL Recovery</span>
+                        <span class="pill-chip">Slotted-Page Layout</span>
+                        <span class="pill-chip">Rust Systems</span>
+                        <span class="pill-chip">Java NIO</span>
                     </div>
                 </div>
 
-                <div class="exp-item">
-                    <div class="exp-dot"></div>
-                    <div class="exp-box">
-                        <h3>Architecture Focus</h3>
-                        <p>Specializing in Distributed Systems and high-performance backends.</p>
+                <!-- CARD 3: CRYPTOGRAPHY & SECURE WEB ARCHITECTURES -->
+                <div class="pillar-card">
+                    <div class="pillar-card-top">
+                        <div class="pillar-num">03</div>
+                        <div class="pillar-icon-box"><i class='bx bx-shield-quarter'></i></div>
+                    </div>
+                    <h3>Cryptography & Secure Web Architectures</h3>
+                    <p class="pillar-lead">Authenticated encryption, deterministic blind indexing, zero-trust state verification, and enterprise microservices.</p>
+                    
+                    <div class="pillar-discussion">
+                        <h4>Internal Design & Philosophy:</h4>
+                        <p>
+                            Specialized Honours and Minor in Cyber Security. Applied implementation of NIST lightweight standard <strong>Ascon-128 AEAD</strong> with page-specific associated data bindings to defend against frame-swap and replay attacks in storage engines.
+                        </p>
+                        <p>
+                            Architecting zero-trust digital transaction pipelines (IDEA_VOLTEX) combining Argon2 memory-hard key derivation, deterministic blind indexing to decouple user identity from database records, and hardened Spring Boot 3.4.x backend infrastructure.
+                        </p>
+                    </div>
+
+                    <div class="pillar-specs">
+                        <span class="pill-chip">Ascon-128 AEAD</span>
+                        <span class="pill-chip">Argon2 Hashing</span>
+                        <span class="pill-chip">Blind Indexing</span>
+                        <span class="pill-chip">Spring Boot 3.4</span>
+                        <span class="pill-chip">Zero-Trust</span>
                     </div>
                 </div>
 
-                <div class="exp-item">
-                    <div class="exp-dot"></div>
-                    <div class="exp-box">
-                        <h3>Market Ready</h3>
-                        <p>Ready to deploy scalable solutions as a Software Engineer.</p>
+                <!-- CARD 4: EDGE AI, SATELLITE & TELEMETRY WORKFLOWS -->
+                <div class="pillar-card">
+                    <div class="pillar-card-top">
+                        <div class="pillar-num">04</div>
+                        <div class="pillar-icon-box"><i class='bx bx-satellite'></i></div>
+                    </div>
+                    <h3>Edge AI, Satellite & Telemetry Workflows</h3>
+                    <p class="pillar-lead">Fidelity-tiered LLM memory systems, spatial Google Earth Engine pipelines, and real-time telemetry observation.</p>
+                    
+                    <div class="pillar-discussion">
+                        <h4>Internal Design & Philosophy:</h4>
+                        <p>
+                            Minor in Artificial Intelligence. Designing zero-cloud embedded long-term memory layers for autonomous AI agents, replacing remote vector DB SaaS with local B+Tree storage and fidelity-tiered Myers-diff delta compression.
+                        </p>
+                        <p>
+                            Spatial pipeline development utilizing Python and Google Earth Engine (GEE) for multi-spectral satellite imagery processing and real-time telemetry observation panels built directly with Swing and custom WebSockets.
+                        </p>
+                    </div>
+
+                    <div class="pillar-specs">
+                        <span class="pill-chip">LLM Memory Layers</span>
+                        <span class="pill-chip">Google Earth Engine</span>
+                        <span class="pill-chip">Spatial NER</span>
+                        <span class="pill-chip">Real-Time Telemetry</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ACADEMIC & MILESTONE TIMELINE -->
+            <div class="academic-timeline-wrap">
+                <h3 class="timeline-title"><i class='bx bx-git-branch'></i> Academic & Engineering Milestones</h3>
+                
+                <div class="timeline">
+                    <div class="timeline-line"></div>
+
+                    <div class="exp-item">
+                        <div class="exp-dot"></div>
+                        <div class="exp-box">
+                            <span class="exp-date">Undergraduate Focus</span>
+                            <h3>Bachelor of Computer Engineering</h3>
+                            <p>Shree L.R. Tiwari College of Engineering. Core focus on Data Structures, Operating Systems, Computer Networks, Distributed Computing, and Systems Architecture.</p>
+                        </div>
+                    </div>
+
+                    <div class="exp-item">
+                        <div class="exp-dot"></div>
+                        <div class="exp-box">
+                            <span class="exp-date">Specialization</span>
+                            <h3>Honours & Minor in Cyber Security</h3>
+                            <p>Deep specialization in lightweight cryptographic primitives (Ascon-128 AEAD, Argon2), zero-knowledge concepts, and zero-trust backend systems.</p>
+                        </div>
+                    </div>
+
+                    <div class="exp-item">
+                        <div class="exp-dot"></div>
+                        <div class="exp-box">
+                            <span class="exp-date">Specialization</span>
+                            <h3>Minor in Artificial Intelligence</h3>
+                            <p>Hands-on implementation of custom algorithmic intelligence, heuristic diff optimizers, NLP spatial extraction pipelines, and embedded agent memory architectures.</p>
+                        </div>
+                    </div>
+
+                    <div class="exp-item">
+                        <div class="exp-dot"></div>
+                        <div class="exp-box">
+                            <span class="exp-date">Systems Research</span>
+                            <h3>Zero-Dependency Systems & Storage Research</h3>
+                            <p>Independent research and development of Yggdrasil storage engine, java-diff-utils-rs porting, and fidelity-tiered memory models.</p>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <div class="about-bottom-cta">
+                <a href="index.html#projects" class="btn">Explore All Projects &rarr;</a>
+                <a href="index.html#contact" class="btn btn-outline">Get In Touch</a>
+            </div>
         </section>
     </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-text">
+            <p>&copy; 2026 Prabhav Dwiwedi &bull; Systems & Low-Level Backend Architecture</p>
+        </div>
+        <div class="footer-iconTop">
+            <a href="#"><i class='bx bx-up-arrow-alt'></i></a>
+        </div>
+    </footer>
 
     <script src="https://unpkg.com/scrollreveal"></script>
     <script src="about-tree.js"></script>
